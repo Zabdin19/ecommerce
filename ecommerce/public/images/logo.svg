@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="96" viewBox="0 0 360 96" role="img" aria-label="Frappe Ecommerce">
+  <g fill="none" stroke="#21395c" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 30 h14 l8 14"/>
+    <path d="M40 40 H146 L130 74 H56 Z"/>
+    <path d="M54 52 H92"/>
+    <path d="M58 63 H86"/>
+  </g>
+  <path d="M92 40 H128 L112 74 H76 Z" fill="#dcb24c"/>
+  <path d="M100 50 H120 L114 60 H94 Z" fill="#21395c"/>
+  <path d="M100 44 V14" fill="none" stroke="#21395c" stroke-width="6.5" stroke-linecap="round"/>
+  <path d="M100 13 l-10 11 M100 13 l10 11" fill="none" stroke="#21395c" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="64" cy="87" r="6" fill="#21395c"/>
+  <circle cx="96" cy="87" r="6" fill="#dcb24c"/>
+  <text x="166" y="49" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="33" font-weight="800" fill="#21395c" letter-spacing="0.5">FRAPPE</text>
+  <text x="167" y="74" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="18" font-weight="600" fill="#21395c" letter-spacing="3.5">ECOMMERCE</text>
+</svg>

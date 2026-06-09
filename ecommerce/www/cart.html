@@ -1,0 +1,204 @@
+{% extends "templates/base.html" %}
+{% block head_include %}{{ super() }}<link rel="stylesheet" href="/assets/ecommerce/css/landing.css">{% endblock %}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="fe-page">
+	{% include "templates/includes/announce.html" %}
+	{% include "templates/includes/header.html" %}
+
+	<main class="fe-container fe-cart">
+		<nav class="fe-crumbs"><a href="/">Home</a><span class="fe-crumbs__sep">›</span><span class="fe-crumbs__cur">Shopping Cart</span></nav>
+
+		<div class="fe-cart__layout">
+			<section class="fe-cart__main" data-shipping="{{ shipping_value }}" data-tax="{{ tax_rate }}">
+				<div class="fe-cart__head">
+					<h2>Your Cart (<span class="fe-cart__count">{{ item_count }} items</span>)</h2>
+					<button class="fe-cart__clear">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg>
+						Clear Cart
+					</button>
+				</div>
+
+				<div class="fe-cart__table">
+					<div class="fe-cart__row fe-cart__row--head">
+						<span>Product Detail</span><span>Unit Price</span><span>Quantity</span><span>Total</span><span></span>
+					</div>
+					{% for it in cart_items %}
+					<div class="fe-cart__row" data-unit="{{ it.unit_value }}" data-item="{{ it.sku }}">
+						<div class="fe-cart__product">
+							<div class="fe-cart__thumb"{% if it.image %} style="background-image:url('{{ it.image }}');background-size:cover;background-position:center"{% endif %}></div>
+							<div>
+								<strong>{{ it.name }}</strong>
+								<span>SKU: {{ it.sku }}</span>
+								{% if it.variant %}<span>Variant: {{ it.variant }}</span>{% endif %}
+							</div>
+						</div>
+						<span class="fe-cart__unit">{{ it.unit }}</span>
+						<div class="fe-stepper" data-stepper>
+							<button type="button" data-step="-1" aria-label="Decrease">−</button>
+							<input type="text" value="{{ it.qty }}" inputmode="numeric" aria-label="Quantity">
+							<button type="button" data-step="1" aria-label="Increase">+</button>
+						</div>
+						<span class="fe-cart__total">{{ it.total }}</span>
+						<button class="fe-cart__remove" data-item="{{ it.sku }}" aria-label="Remove item">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+						</button>
+					</div>
+					{% endfor %}
+					{% if not cart_items %}
+					<div class="fe-cart__empty">Your cart is empty. <a href="/all-products">Browse products →</a></div>
+					{% endif %}
+				</div>
+
+				<div class="fe-cart__foot">
+					<a href="/all-products" class="fe-cart__continue">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+						Continue Shopping
+					</a>
+					<div class="fe-cart__protect">
+						<span>Shipping protection included?</span>
+						<label class="fe-switch"><input type="checkbox"><span></span></label>
+					</div>
+				</div>
+			</section>
+
+			<aside class="fe-cart__side">
+				<div class="fe-summary">
+					<h3>Order Summary</h3>
+					<div class="fe-summary__row"><span>Subtotal</span><span class="fe-cart__subtotal">{{ summary.subtotal }}</span></div>
+					<div class="fe-summary__row"><span>Shipping Estimate</span><span>{{ summary.shipping }}</span></div>
+					<div class="fe-summary__row"><span>{{ summary.tax_label }}</span><span class="fe-cart__tax">{{ summary.tax }}</span></div>
+					<div class="fe-summary__total"><div><strong>Total</strong><small>Net Payable Amount</small></div><span class="fe-cart__grandtotal">{{ summary.total }}</span></div>
+
+					<span class="fe-summary__label">Coupon Code</span>
+					<div class="fe-coupon">
+						<input type="text" placeholder="Enter code">
+						<button class="fe-btn fe-btn--navy">Apply</button>
+					</div>
+
+					<a href="{% if chrome.logged_in %}/checkout{% else %}/sign-in?redirect=/checkout{% endif %}" class="fe-btn fe-btn--gold fe-btn--block fe-summary__checkout">
+						Proceed to Checkout
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+					</a>
+					<div class="fe-summary__pay"><span></span><span></span><span></span></div>
+				</div>
+
+				<div class="fe-support">
+					<div class="fe-support__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/></svg></div>
+					<div>
+						<strong>Wholesale Support</strong>
+						<p>Need help with bulk logistics or tax exemption? Our agents are available 24/7 for corporate clients.</p>
+						<a href="#">Contact Distribution Desk</a>
+					</div>
+				</div>
+			</aside>
+		</div>
+	</main>
+
+	{% include "templates/includes/footer.html" %}
+</div>
+{% endblock %}
+
+{% block script %}{{ super() }}
+<script>
+(function () {
+	var main = document.querySelector(".fe-cart__main");
+	if (!main) return;
+	var shipping = parseFloat(main.getAttribute("data-shipping")) || 0;
+	var taxRate = parseFloat(main.getAttribute("data-tax")) || 0;
+
+	function fmt(v) { return "$" + v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+	function setText(sel, txt) { var el = document.querySelector(sel); if (el) el.textContent = txt; }
+
+	function recalc() {
+		var subtotal = 0, count = 0;
+		main.querySelectorAll(".fe-cart__row[data-unit]").forEach(function (row) {
+			var unit = parseFloat(row.getAttribute("data-unit")) || 0;
+			var input = row.querySelector(".fe-stepper input");
+			var qty = Math.max(1, parseInt(input.value, 10) || 1);
+			input.value = qty;
+			var line = unit * qty;
+			subtotal += line;
+			count += qty;
+			var cell = row.querySelector(".fe-cart__total");
+			if (cell) cell.textContent = fmt(line);
+		});
+		var tax = subtotal * taxRate / 100;
+		setText(".fe-cart__subtotal", fmt(subtotal));
+		setText(".fe-cart__tax", fmt(tax));
+		setText(".fe-cart__grandtotal", fmt(subtotal + shipping + tax));
+		setText(".fe-cart__count", count + (count === 1 ? " item" : " items"));
+	}
+
+	function badge(count) { if (window.feUpdateCartBadge) window.feUpdateCartBadge(count); }
+
+	function persist(row) {
+		var item = row.getAttribute("data-item");
+		var qty = parseInt(row.querySelector(".fe-stepper input").value, 10) || 1;
+		frappe.call({
+			method: "ecommerce.api.update_cart_item",
+			args: { item_code: item, qty: qty },
+			callback: function (r) { if (r.message) badge(r.message.item_count); },
+			error: function (err) {
+				if (err && (err.status === 401 || err.status === 403)) window.location.href = "/sign-in?redirect=/cart";
+			},
+		});
+	}
+
+	main.querySelectorAll("[data-stepper]").forEach(function (wrap) {
+		var input = wrap.querySelector("input");
+		var row = wrap.closest(".fe-cart__row");
+		wrap.querySelectorAll("[data-step]").forEach(function (btn) {
+			btn.addEventListener("click", function () {
+				var d = parseInt(btn.getAttribute("data-step"), 10);
+				input.value = Math.max(1, (parseInt(input.value, 10) || 1) + d);
+				recalc();
+				persist(row);
+			});
+		});
+		input.addEventListener("change", function () { recalc(); persist(row); });
+	});
+
+	main.querySelectorAll(".fe-cart__remove").forEach(function (btn) {
+		btn.addEventListener("click", function () {
+			frappe.call({
+				method: "ecommerce.api.remove_cart_item",
+				args: { item_code: btn.getAttribute("data-item") },
+				callback: function () { window.location.reload(); },
+				error: function (err) {
+					if (err && (err.status === 401 || err.status === 403)) window.location.href = "/sign-in?redirect=/cart";
+				},
+			});
+		});
+	});
+
+	var clearBtn = main.querySelector(".fe-cart__clear");
+	if (clearBtn) clearBtn.addEventListener("click", function () {
+		frappe.call({
+			method: "ecommerce.api.clear_cart",
+			callback: function () { window.location.reload(); },
+			error: function (err) {
+				if (err && (err.status === 401 || err.status === 403)) window.location.href = "/sign-in?redirect=/cart";
+			},
+		});
+	});
+
+	var coupon = main.closest(".fe-cart__layout") ? document.querySelector(".fe-coupon") : null;
+	if (coupon) {
+		var applyBtn = coupon.querySelector("button");
+		applyBtn.addEventListener("click", function () {
+			frappe.call({
+				method: "ecommerce.api.cart.apply_coupon",
+				args: { code: coupon.querySelector("input").value },
+				callback: function (r) {
+					if (r.message && window.frappe && frappe.show_alert)
+						frappe.show_alert({ message: r.message.message, indicator: r.message.ok ? "green" : "red" });
+				},
+			});
+		});
+	}
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "templates/base.html" %}
+{% block head_include %}{{ super() }}<link rel="stylesheet" href="/assets/ecommerce/css/landing.css">{% endblock %}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="fe-page">
+	{% include "templates/includes/announce.html" %}
+	{% include "templates/includes/header.html" %}
+
+	<main class="fe-container fe-dash">
+		<div class="fe-dash__layout">
+			<aside class="fe-dash__side">
+				<div class="fe-dash__org">
+					<strong>{{ account.company }}</strong>
+					<span>Account ID: {{ account.account_id }}</span>
+				</div>
+				<nav class="fe-dash__nav">
+					{% for n in nav %}
+					<a href="#" class="{% if n.active %}is-active{% endif %}">{{ n.label }}</a>
+					{% endfor %}
+				</nav>
+				<div class="fe-dash__user">
+					<span class="fe-dash__avatar">{{ account.first_name[:1] | upper }}{{ account.last_name[:1] | upper }}</span>
+					<div><strong>{{ account.first_name }} {{ account.last_name }}</strong><small>{{ account.role }}</small></div>
+				</div>
+			</aside>
+
+			<section class="fe-dash__main">
+				<h1 class="fe-dash__welcome">Welcome back, {{ account.first_name }} {{ account.last_name }}</h1>
+				<p class="fe-dash__lead">Manage your industrial inventory and procurement pipeline from your centralized dashboard.</p>
+
+				<div class="fe-stats">
+					{% for s in stats %}
+					<div class="fe-stat">
+						<div class="fe-stat__top"><span class="fe-stat__tag">{{ s.tag }}</span></div>
+						<span class="fe-stat__label">{{ s.label }}</span>
+						<span class="fe-stat__value">{{ s.value }}</span>
+					</div>
+					{% endfor %}
+				</div>
+
+				<div class="fe-dash__cards">
+					<div class="fe-card">
+						<div class="fe-card__head"><h3>Account Details</h3><a href="#" class="fe-link">Edit Profile</a></div>
+						<div class="fe-dash__grid">
+							<div><small>First Name</small><strong>{{ account.first_name }}</strong></div>
+							<div><small>Last Name</small><strong>{{ account.last_name }}</strong></div>
+							<div><small>Corporate Email</small><strong>{{ account.email }}</strong></div>
+							<div><small>Phone Number</small><strong>{{ account.phone }}</strong></div>
+						</div>
+					</div>
+					<div class="fe-card">
+						<div class="fe-card__head"><h3>Primary Address</h3></div>
+						<strong class="fe-dash__addrlabel">{{ address.label }}</strong>
+						<address class="fe-dash__addr">{% for line in address.lines %}{{ line }}<br>{% endfor %}</address>
+						<button class="fe-btn fe-btn--outline">Manage Addresses</button>
+					</div>
+				</div>
+
+				<div class="fe-card">
+					<div class="fe-card__head"><h3>Recent Orders</h3><button class="fe-btn fe-btn--gold">View All History</button></div>
+					<table class="fe-orders">
+						<thead><tr><th>Order ID</th><th>Date</th><th>Status</th><th>Total</th><th>Action</th></tr></thead>
+						<tbody>
+							{% for o in recent_orders %}
+							<tr>
+								<td class="fe-orders__id">{{ o.id }}</td>
+								<td>{{ o.date }}</td>
+								<td><span class="fe-pill fe-pill--{{ o.status_class }}">{{ o.status }}</span></td>
+								<td>{{ o.total }}</td>
+								<td><a href="#" class="fe-link">Details</a></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</section>
+		</div>
+	</main>
+
+	{% include "templates/includes/footer.html" %}
+</div>
+{% endblock %}

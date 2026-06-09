@@ -1,0 +1,9 @@
+{# Announcement bar. Expects `chrome` in context. #}
+{% if chrome.announcement_text_1 or chrome.announcement_text_2 %}
+<div class="fe-announce">
+	<div class="fe-container fe-announce__inner">
+		{% if chrome.announcement_text_1 %}<span class="fe-announce__item">🚚 {{ chrome.announcement_text_1 }}</span>{% endif %}
+		{% if chrome.announcement_text_2 %}<span class="fe-announce__sep"></span><span class="fe-announce__item">✔ {{ chrome.announcement_text_2 }}</span>{% endif %}
+	</div>
+</div>
+{% endif %}

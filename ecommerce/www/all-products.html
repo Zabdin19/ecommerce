@@ -1,0 +1,102 @@
+{% extends "templates/base.html" %}
+{% block head_include %}{{ super() }}<link rel="stylesheet" href="/assets/ecommerce/css/landing.css">{% endblock %}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% macro stars(rating) %}
+	{% set full = (rating | round(0, 'floor')) | int %}
+	{% for i in range(5) %}<svg class="fe-star{% if i < full %} is-on{% endif %}" viewBox="0 0 24 24"><path d="m12 3 2.6 5.6 6.1.7-4.5 4.1 1.2 6L12 17.8 6.6 19.4l1.2-6L3.3 9.3l6.1-.7z"/></svg>{% endfor %}
+{% endmacro %}
+
+{% block content %}
+<div class="fe-page">
+	{% include "templates/includes/announce.html" %}
+	{% include "templates/includes/header.html" %}
+
+	<main class="fe-container fe-plp">
+		<nav class="fe-crumbs"><a href="/">Home</a><span class="fe-crumbs__sep">›</span><a href="/all-products">Shop</a><span class="fe-crumbs__sep">›</span><span class="fe-crumbs__cur">Industrial Catalog</span></nav>
+
+		<div class="fe-plp__layout">
+			<aside class="fe-filters">
+				<h3 class="fe-filters__title">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+					Catalog
+				</h3>
+				<ul class="fe-filters__cats">
+					<li><a href="/all-products"{% if not active_group %} class="is-active"{% endif %}>All Products</a></li>
+					{% for c in categories %}
+					<li><a href="/all-products?item_group={{ c | urlencode }}"{% if c == active_group %} class="is-active"{% endif %}>{{ c }}{% if c == active_group %}<span>›</span>{% endif %}</a></li>
+					{% endfor %}
+				</ul>
+
+				<div class="fe-filters__block">
+					<span class="fe-filters__label">Price Range</span>
+					<input type="range" min="0" max="100" value="35" class="fe-range">
+					<div class="fe-filters__rangelabels"><span>$0</span><span>$5,000+</span></div>
+				</div>
+
+				{% if manufacturers %}
+				<div class="fe-filters__block">
+					<span class="fe-filters__label">Manufacturer</span>
+					{% for name, checked in manufacturers %}
+					<a class="fe-check" href="/all-products?brand={{ name | urlencode }}"><input type="checkbox"{% if checked %} checked{% endif %} onclick="return false"><span>{{ name }}</span></a>
+					{% endfor %}
+				</div>
+				{% endif %}
+
+				<div class="fe-filters__toggle">
+					<span>In-Stock Only</span>
+					<label class="fe-switch"><input type="checkbox" checked><span></span></label>
+				</div>
+
+				<button class="fe-btn fe-btn--navy fe-btn--block">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5h6l1 4H8z"/><path d="M5 9h14v10H5z"/></svg>
+					Request Quote
+				</button>
+			</aside>
+
+			<section class="fe-plp__main">
+				<div class="fe-plp__toolbar">
+					<span class="fe-plp__count">Showing 1-{{ products|length }} of {{ result_count }} results</span>
+					<div class="fe-select">Sort by: Newest Arrivals
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+					</div>
+				</div>
+
+				<div class="fe-products fe-products--plp">
+					{% for p in products %}
+					<article class="fe-product">
+						<a href="/product?item={{ p.sku }}" class="fe-product__media" aria-label="{{ p.name }}"{% if p.image %} style="background-image:url('{{ p.image }}');background-size:cover;background-position:center"{% endif %}>
+							{% if p.badge %}<span class="fe-tag{% if p.badge|lower == 'in stock' %} fe-tag--green{% endif %}">{{ p.badge }}</span>{% endif %}
+						</a>
+						<div class="fe-product__body">
+							<span class="fe-product__brand">{{ p.brand }} • SKU: {{ p.sku }}</span>
+							<h4 class="fe-product__name"><a href="/product?item={{ p.sku }}">{{ p.name }}</a></h4>
+							<div class="fe-product__rate">{{ stars(p.rating) }}<span>({{ p.rating }})</span></div>
+							<div class="fe-product__foot">
+								<span class="fe-product__price">{{ p.price }}</span>
+								<button class="fe-cartbtn" data-item="{{ p.sku }}" aria-label="Add to cart">
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.2 11.2A2 2 0 0 0 9.2 16h8.4a2 2 0 0 0 2-1.6L21 7H6"/></svg>
+								</button>
+							</div>
+						</div>
+					</article>
+					{% endfor %}
+				</div>
+
+				<div class="fe-pagination">
+					<button class="fe-page-nav" aria-label="Previous">‹</button>
+					{% for n in page_pages %}
+						{% if n == 1 %}<button class="fe-page-num is-active">{{ n }}</button>
+						{% elif n == "…" %}<span class="fe-page-dots">{{ n }}</span>
+						{% else %}<button class="fe-page-num">{{ n }}</button>{% endif %}
+					{% endfor %}
+					<button class="fe-page-nav" aria-label="Next">›</button>
+				</div>
+			</section>
+		</div>
+	</main>
+
+	{% include "templates/includes/footer.html" %}
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "templates/base.html" %}
+
+{#-
+	About Us page. Content is sourced from the "About Page Settings" Single
+	DocType and resolved in www/about.py. Falls back to design-matched defaults.
+-#}
+
+{% block head_include %}
+{{ super() }}
+<link rel="stylesheet" href="/assets/ecommerce/css/landing.css">
+{% endblock %}
+
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+{% set a = about %}
+<div class="fe-page">
+
+	{% include "templates/includes/announce.html" %}
+	{% include "templates/includes/header.html" %}
+
+	<!-- Hero -->
+	<section class="fe-about__hero">
+		{% if a.hero_image %}
+		<div class="fe-about__herobg" style="background-image:url('{{ a.hero_image }}')"></div>
+		<div class="fe-about__overlay"></div>
+		{% endif %}
+		<div class="fe-container">
+			<h1>{{ a.page_title }}</h1>
+			{% if a.page_subtitle %}<p>{{ a.page_subtitle }}</p>{% endif %}
+		</div>
+	</section>
+
+	<!-- Our Story -->
+	{% if a.story_heading or a.story_body %}
+	<section class="fe-section">
+		<div class="fe-container fe-about__story">
+			<div class="fe-about__storytext">
+				{% if a.story_heading %}<span class="fe-eyebrow">{{ a.story_heading }}</span>{% endif %}
+				<div class="fe-about__rich">{{ a.story_body | safe }}</div>
+			</div>
+			{% if a.story_image %}<div class="fe-about__storyimg" style="background-image:url('{{ a.story_image }}')"></div>{% endif %}
+		</div>
+	</section>
+	{% endif %}
+
+	<!-- Stats -->
+	{% if a.stats %}
+	<section class="fe-section fe-section--tight">
+		<div class="fe-container fe-about__stats">
+			{% for s in a.stats %}
+			<div class="fe-about__stat"><strong>{{ s.value }}</strong><span>{{ s.label }}</span></div>
+			{% endfor %}
+		</div>
+	</section>
+	{% endif %}
+
+	<!-- Mission & Vision -->
+	{% if a.mission_text or a.vision_text %}
+	<section class="fe-section">
+		<div class="fe-container fe-about__mv">
+			{% if a.mission_text %}<div class="fe-about__mvcard"><h3>{{ a.mission_heading }}</h3><p>{{ a.mission_text }}</p></div>{% endif %}
+			{% if a.vision_text %}<div class="fe-about__mvcard"><h3>{{ a.vision_heading }}</h3><p>{{ a.vision_text }}</p></div>{% endif %}
+		</div>
+	</section>
+	{% endif %}
+
+	<!-- Values -->
+	{% if a.value_items %}
+	<section class="fe-section fe-section--features">
+		<div class="fe-container">
+			<div class="fe-section__head"><span class="fe-eyebrow">{{ a.values_heading }}</span></div>
+			<div class="fe-features">
+				{% for f in a.value_items %}
+				<div class="fe-feature">
+					<div class="fe-feature__icon">{{ f.icon | safe }}</div>
+					<div><h4>{{ f.title }}</h4><p>{{ f.description }}</p></div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+	{% endif %}
+
+	<!-- Team -->
+	{% if a.team %}
+	<section class="fe-section">
+		<div class="fe-container">
+			<div class="fe-section__head"><span class="fe-eyebrow">{{ a.team_heading }}</span></div>
+			<div class="fe-about__team">
+				{% for m in a.team %}
+				<div class="fe-about__member">
+					<div class="fe-about__avatar"{% if m.image %} style="background-image:url('{{ m.image }}')"{% endif %}>{% if not m.image %}{{ m.member_name[:1] | upper }}{% endif %}</div>
+					<strong>{{ m.member_name }}</strong>
+					{% if m.role %}<span>{{ m.role }}</span>{% endif %}
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+	{% endif %}
+
+	<!-- CTA -->
+	{% if a.cta_heading %}
+	<section class="fe-section fe-section--tight">
+		<div class="fe-container">
+			<div class="fe-about__cta">
+				<h2>{{ a.cta_heading }}</h2>
+				{% if a.cta_text %}<p>{{ a.cta_text }}</p>{% endif %}
+				{% if a.cta_button_text %}<a href="{{ a.cta_button_link or '#' }}" class="fe-btn fe-btn--gold">{{ a.cta_button_text }}
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+				</a>{% endif %}
+			</div>
+		</div>
+	</section>
+	{% endif %}
+
+	{% include "templates/includes/footer.html" %}
+</div>
+{% endblock %}

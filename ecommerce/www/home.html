@@ -1,0 +1,228 @@
+{% extends "templates/base.html" %}
+
+{#-
+	Ecommerce landing page.
+	Content is sourced from the standard Website Settings DocType (extended with
+	custom fields by this app) and resolved in www/home.py.
+-#}
+
+{% block head_include %}
+{{ super() }}
+<link rel="stylesheet" href="/assets/ecommerce/css/landing.css">
+{% endblock %}
+
+{# Replace Frappe's default navbar/footer with the design's own chrome. #}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+{% set l = landing %}
+<div class="fe-page">
+
+	<!-- Announcement bar + Header (shared chrome) -->
+	{% include "templates/includes/announce.html" %}
+	{% include "templates/includes/header.html" %}
+
+	<!-- Hero -->
+	<section class="fe-hero">
+		{% if l.hero_images %}
+		<div class="fe-hero__bg" data-hero-slides>
+			{% for img in l.hero_images %}
+			<div class="fe-hero__slide{% if loop.first %} is-active{% endif %}" style="background-image:url('{{ img }}')"></div>
+			{% endfor %}
+			<div class="fe-hero__overlay"></div>
+		</div>
+		{% endif %}
+		<div class="fe-container fe-hero__inner">
+			{% if l.hero_badge %}<span class="fe-badge">{{ l.hero_badge }}</span>{% endif %}
+			<h1 class="fe-hero__title">
+				{{ l.hero_heading }}<br>
+				<span class="fe-accent">{{ l.hero_heading_highlight }}</span>
+			</h1>
+			<p class="fe-hero__sub">{{ l.hero_subtext }}</p>
+			<div class="fe-hero__cta">
+				{% if l.hero_button_text %}
+				<a href="{{ l.hero_button_link }}" class="fe-btn fe-btn--gold">{{ l.hero_button_text }}
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+				</a>
+				{% endif %}
+				{% if l.hero_secondary_button_text %}
+				<a href="{{ l.hero_secondary_button_link }}" class="fe-btn fe-btn--ghost">{{ l.hero_secondary_button_text }}</a>
+				{% endif %}
+			</div>
+		</div>
+	</section>
+
+	<!-- Essential categories -->
+	{% if l.category_cards %}
+	{% set large = (l.category_cards | selectattr('is_large') | list) %}
+	{% set small = (l.category_cards | rejectattr('is_large') | list) %}
+	{% if not large %}{% set large = [l.category_cards[0]] %}{% set small = l.category_cards[1:] %}{% endif %}
+	<section class="fe-section">
+		<div class="fe-container">
+			<div class="fe-section__head">
+				<div>
+					<span class="fe-eyebrow">{{ l.categories_heading }}</span>
+				</div>
+				<p class="fe-section__lead">{{ l.categories_subtext }}</p>
+			</div>
+			<div class="fe-cats">
+				{% for card in large %}
+				<a href="{{ card.link or '#' }}" class="fe-cat fe-cat--lg"{% if card.image %} style="background-image:linear-gradient(180deg, rgba(13,31,60,.05), rgba(13,31,60,.75)), url('{{ card.image }}')"{% endif %}>
+					<div class="fe-cat__body">
+						<h3>{{ card.title }}</h3>
+						{% if card.subtitle %}<p>{{ card.subtitle }}</p>{% endif %}
+						<span class="fe-cat__link">Explore Category
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+						</span>
+					</div>
+				</a>
+				{% endfor %}
+				<div class="fe-cats__grid">
+					{% for card in small %}
+					<a href="{{ card.link or '#' }}" class="fe-cat fe-cat--sm"{% if card.image %} style="background-image:linear-gradient(180deg, rgba(13,31,60,.05), rgba(13,31,60,.78)), url('{{ card.image }}')"{% endif %}>
+						<div class="fe-cat__body">
+							<h3>{{ card.title }}</h3>
+							{% if card.subtitle %}<p>{{ card.subtitle }}</p>{% endif %}
+						</div>
+					</a>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</section>
+	{% endif %}
+
+	<!-- Best sellers -->
+	{% if l.best_sellers %}
+	<section class="fe-section fe-section--tight">
+		<div class="fe-container">
+			<div class="fe-section__head fe-section__head--row">
+				<span class="fe-eyebrow">{{ l.best_sellers_heading }}</span>
+			</div>
+			<div class="fe-products">
+				{% for p in l.best_sellers %}
+				<article class="fe-product">
+					<a href="/product?item={{ p.sku }}" class="fe-product__media" aria-label="{{ p.name }}"{% if p.image %} style="background-image:url('{{ p.image }}');background-size:cover;background-position:center"{% endif %}>
+						{% if p.badge %}<span class="fe-tag{% if p.badge|lower == 'in stock' %} fe-tag--green{% endif %}">{{ p.badge }}</span>{% endif %}
+					</a>
+					<div class="fe-product__body">
+						<span class="fe-product__brand">{{ p.brand }}</span>
+						<h4 class="fe-product__name"><a href="/product?item={{ p.sku }}">{{ p.name }}</a></h4>
+						<span class="fe-product__sku">SKU: {{ p.sku }}</span>
+						<div class="fe-product__foot">
+							<span class="fe-product__price">{{ p.price }}</span>
+							<button class="fe-cartbtn" data-item="{{ p.sku }}" aria-label="Add to cart">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.2 11.2A2 2 0 0 0 9.2 16h8.4a2 2 0 0 0 2-1.6L21 7H6"/></svg>
+							</button>
+						</div>
+					</div>
+				</article>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+	{% endif %}
+
+	<!-- Promotion banner -->
+	<section class="fe-section">
+		<div class="fe-container">
+			<div class="fe-promo">
+				<div class="fe-promo__media"{% if l.promo_image %} style="background-image:url('{{ l.promo_image }}')"{% endif %}></div>
+				<div class="fe-promo__body">
+					<span class="fe-eyebrow fe-eyebrow--light">{{ l.promo_title }} <strong>{{ l.promo_subtitle }}</strong></span>
+					<p>{{ l.promo_text }}</p>
+					<div class="fe-promo__cta">
+						<a href="{{ l.promo_button_link }}" class="fe-btn fe-btn--gold">{{ l.promo_button_text }}</a>
+						{% if l.promo_note %}<span class="fe-promo__note">{{ l.promo_note }}</span>{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Brand strip -->
+	{% if l.brands %}
+	<section class="fe-brands">
+		<div class="fe-container fe-brands__inner">
+			{% for b in l.brands %}<span class="fe-brands__item">{{ b }}</span>{% endfor %}
+		</div>
+	</section>
+	{% endif %}
+
+	<!-- Trust features -->
+	{% if l.features %}
+	<section class="fe-section fe-section--features">
+		<div class="fe-container fe-features">
+			{% for f in l.features %}
+			<div class="fe-feature">
+				<div class="fe-feature__icon">{{ f.icon | safe }}</div>
+				<div>
+					<h4>{{ f.title }}</h4>
+					<p>{{ f.description }}</p>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</section>
+	{% endif %}
+
+	<!-- Newsletter -->
+	<section class="fe-section fe-section--tight">
+		<div class="fe-container fe-newsletter">
+			<div>
+				<h3 class="fe-newsletter__title">{{ l.newsletter_title }}</h3>
+				<p class="fe-newsletter__sub">{{ l.newsletter_subtitle }}</p>
+			</div>
+			<form class="fe-newsletter__form" id="fe-newsletter">
+				<input type="email" name="email" required placeholder="Business Email Address" aria-label="Business email address">
+				<button type="submit" class="fe-btn fe-btn--navy">Subscribe</button>
+			</form>
+		</div>
+	</section>
+
+	<!-- Footer (shared chrome) -->
+	{% include "templates/includes/footer.html" %}
+</div>
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+<script>
+// Hero background slideshow: cross-fade through the uploaded images.
+(function () {
+	var bg = document.querySelector("[data-hero-slides]");
+	if (!bg) return;
+	var slides = bg.querySelectorAll(".fe-hero__slide");
+	if (slides.length < 2) return;
+	var i = 0;
+	setInterval(function () {
+		slides[i].classList.remove("is-active");
+		i = (i + 1) % slides.length;
+		slides[i].classList.add("is-active");
+	}, 5000);
+})();
+(function () {
+	var form = document.getElementById("fe-newsletter");
+	if (!form) return;
+	form.addEventListener("submit", function (e) {
+		e.preventDefault();
+		var email = form.querySelector("input[name=email]").value;
+		var btn = form.querySelector("button");
+		btn.disabled = true;
+		frappe.call({
+			method: "ecommerce.www.home.subscribe",
+			args: { email: email },
+			callback: function (r) {
+				var msg = (r.message && r.message.message) || "Thanks!";
+				var done = document.createElement("p");
+				done.className = "fe-newsletter__done";
+				done.textContent = msg;
+				form.replaceWith(done);
+			},
+			error: function () { btn.disabled = false; },
+		});
+	});
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,95 @@
+{# Site footer. Expects `chrome` and `current_year` in context. #}
+<footer class="fe-footer">
+	<div class="fe-container fe-footer__top">
+		<div class="fe-footer__brand">
+			<div class="fe-footer__logo">{% if chrome.logo %}<img src="{{ chrome.logo }}" alt="{{ chrome.brand }}">{% elif chrome.brand_html %}{{ chrome.brand_html | safe }}{% else %}{{ chrome.brand }}{% endif %}</div>
+			<p>{{ chrome.footer_description }}</p>
+			<div class="fe-footer__social">
+				<a href="#" aria-label="Website"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg></a>
+				<a href="mailto:#" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+				<a href="tel:#" aria-label="Phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L20 13l-1 5a16 16 0 0 1-14-14z"/></svg></a>
+			</div>
+		</div>
+		{% for col in chrome.footer_columns %}
+		<div class="fe-footer__col">
+			<h5>{{ col.heading }}</h5>
+			<ul>
+				{% for link in col.links %}<li><a href="{{ link.url }}">{{ link.label }}</a></li>{% endfor %}
+			</ul>
+		</div>
+		{% endfor %}
+		<div class="fe-footer__col">
+			<h5>Contact Us</h5>
+			<ul>
+				{% if chrome.footer_contact_address %}<li>{{ chrome.footer_contact_address }}</li>{% endif %}
+				{% if chrome.footer_contact_phone %}<li><a href="tel:{{ chrome.footer_contact_phone }}">{{ chrome.footer_contact_phone }}</a></li>{% endif %}
+			</ul>
+		</div>
+	</div>
+	<div class="fe-container fe-footer__bottom">
+		<span>© {{ current_year }} {{ chrome.copyright }}</span>
+		<span class="fe-footer__pay">VISA · NET 30 · MASTERCARD</span>
+	</div>
+</footer>
+
+<script>
+// Storefront-wide add-to-cart: POST to the cart API and update the header badge.
+(function () {
+	window.feUpdateCartBadge = function (count) {
+		var b = document.getElementById("fe-cart-badge");
+		if (!b) return;
+		b.textContent = count;
+		if (count > 0) b.removeAttribute("hidden"); else b.setAttribute("hidden", "");
+	};
+	document.addEventListener("click", function (e) {
+		var el = e.target.closest(".fe-cartbtn, [data-add-to-cart]");
+		if (!el) return;
+		e.preventDefault();
+		var item = el.getAttribute("data-item");
+		if (!item) { window.location.href = "/cart"; return; }
+		el.style.opacity = "0.5";
+		frappe.call({
+			method: "ecommerce.api.add_to_cart",
+			args: { item_code: item, qty: 1 },
+			callback: function (r) {
+				el.style.opacity = "";
+				if (r.message) window.feUpdateCartBadge(r.message.item_count);
+				if (window.frappe && frappe.show_alert) frappe.show_alert({ message: "Added to cart", indicator: "green" });
+			},
+			error: function () {
+				// Add to Cart works for guests too — never redirect to login here.
+				el.style.opacity = "";
+				if (window.frappe && frappe.show_alert) frappe.show_alert({ message: "Could not add to cart. Please try again.", indicator: "red" });
+			},
+		});
+	});
+
+	// Account dropdown toggle (open/close + click-outside to dismiss)
+	document.addEventListener("click", function (e) {
+		var acct = document.querySelector("[data-account]");
+		if (!acct) return;
+		var btn = e.target.closest(".fe-account__btn");
+		if (btn && acct.contains(btn)) {
+			var open = acct.classList.toggle("is-open");
+			btn.setAttribute("aria-expanded", open ? "true" : "false");
+			return;
+		}
+		if (!e.target.closest(".fe-account__menu")) {
+			acct.classList.remove("is-open");
+			var b = acct.querySelector(".fe-account__btn");
+			if (b) b.setAttribute("aria-expanded", "false");
+		}
+	});
+
+	// Logout
+	document.addEventListener("click", function (e) {
+		if (!e.target.closest("#fe-logout")) return;
+		e.preventDefault();
+		frappe.call({
+			method: "ecommerce.api.logout_customer",
+			callback: function (r) { window.location.href = (r.message && r.message.redirect) || "/sign-in"; },
+			error: function () { window.location.href = "/sign-in"; },
+		});
+	});
+})();
+</script>

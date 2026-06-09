@@ -1,0 +1,96 @@
+{% extends "templates/base.html" %}
+{% block head_include %}{{ super() }}<link rel="stylesheet" href="/assets/ecommerce/css/landing.css">{% endblock %}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="fe-page fe-auth">
+	<div class="fe-auth__wrap fe-auth__wrap--wide">
+		<a href="/" class="fe-auth__logo">{% if logo %}<img src="{{ logo }}" alt="{{ brand }}">{% else %}🛒{% endif %}</a>
+		<h1 class="fe-auth__title">Join {{ brand }}</h1>
+		<p class="fe-auth__sub">Access premium B2B wholesale inventory</p>
+
+		<form class="fe-auth__card" id="fe-register">
+			<div class="fe-form">
+				<label class="fe-field"><span>First Name</span><input type="text" name="first_name" placeholder="John"></label>
+				<label class="fe-field"><span>Last Name</span><input type="text" name="last_name" placeholder="Doe"></label>
+				<label class="fe-field fe-field--full"><span>Corporate Email Address</span>
+					<div class="fe-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><input type="email" name="email" placeholder="j.doe@company.com"></div>
+				</label>
+				<label class="fe-field fe-field--full"><span>Phone Number</span>
+					<div class="fe-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L20 13l-1 5a16 16 0 0 1-14-14z"/></svg><input type="text" name="phone" placeholder="+1 (555) 000-0000"></div>
+				</label>
+				<label class="fe-field fe-field--full"><span>Password</span>
+					<div class="fe-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><input type="password" name="password" placeholder="••••••••"></div>
+				</label>
+				<label class="fe-field fe-field--full"><span>Confirm Password</span>
+					<div class="fe-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><input type="password" name="confirm_password" placeholder="••••••••"></div>
+				</label>
+			</div>
+			<small class="fe-auth__note">Must be at least 8 characters long</small>
+			<label class="fe-check"><input type="checkbox"><span>I agree to the <a href="/terms-of-service" class="fe-link">Terms of Service</a> and <a href="/privacy-policy" class="fe-link">Privacy Policy</a>.</span></label>
+			<button type="submit" class="fe-btn fe-btn--gold fe-btn--block">Create Account →</button>
+		</form>
+
+		<p class="fe-auth__alt">Already have a corporate account? <a href="/sign-in" class="fe-link">Log In Here</a></p>
+
+		<div class="fe-auth__chips">
+			{% for chip in trust_chips %}
+			<div class="fe-auth__chip"><span>{{ chip.icon | safe }}</span>{{ chip.title }}</div>
+			{% endfor %}
+		</div>
+	</div>
+
+	<footer class="fe-auth__footer--bar">
+		<div class="fe-container fe-authbar">
+			<span>© {{ current_year }} {{ brand }}. All Rights Reserved.</span>
+			<nav><a href="/privacy-policy">Privacy</a><a href="/terms-of-service">Terms</a><a href="/contact">Help Center</a></nav>
+		</div>
+	</footer>
+</div>
+{% endblock %}
+
+{% block script %}{{ super() }}
+<script>
+(function () {
+	var form = document.getElementById("fe-register");
+	if (!form) return;
+	function v(name) { var el = form.querySelector('[name="' + name + '"]'); return el ? (el.value || "").trim() : ""; }
+	function alert(msg, ind) { if (window.frappe && frappe.show_alert) frappe.show_alert({ message: msg, indicator: ind || "red" }); }
+
+	form.addEventListener("submit", function (e) {
+		e.preventDefault();
+		var btn = form.querySelector("button[type=submit]");
+		var first = v("first_name"), last = v("last_name"), email = v("email");
+		var phone = v("phone"), password = v("password"), confirm = v("confirm_password");
+
+		if (!first) { alert("Please enter your first name."); return; }
+		if (!email) { alert("Please enter your corporate email."); return; }
+		if (password.length < 8) { alert("Password must be at least 8 characters long."); return; }
+		if (password !== confirm) { alert("Passwords do not match."); return; }
+
+		btn.disabled = true;
+		btn.textContent = "Creating account…";
+		frappe.call({
+			method: "ecommerce.api.register_customer",
+			args: { first_name: first, last_name: last, email: email, phone: phone, password: password, confirm_password: confirm },
+			callback: function (r) {
+				var m = r.message || {};
+				alert(m.message || "Done", m.ok ? "green" : "red");
+				if (m.ok) {
+					setTimeout(function () { window.location.href = m.redirect || "/sign-in"; }, 1200);
+				} else {
+					btn.disabled = false;
+					btn.textContent = "Create Account →";
+				}
+			},
+			error: function () {
+				btn.disabled = false;
+				btn.textContent = "Create Account →";
+				alert("Something went wrong. Please try again.");
+			},
+		});
+	});
+})();
+</script>
+{% endblock %}

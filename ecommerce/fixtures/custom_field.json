@@ -1,0 +1,443 @@
+[
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_ecommerce_tab",
+  "fieldtype": "Tab Break",
+  "label": "Ecommerce Landing Page",
+  "insert_after": "footer_powered",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_ecommerce_tab"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_announcement_section",
+  "fieldtype": "Section Break",
+  "label": "Announcement Bar",
+  "insert_after": "custom_ecommerce_tab",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_announcement_section"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_announcement_text_1",
+  "fieldtype": "Data",
+  "label": "Announcement Text 1",
+  "insert_after": "custom_announcement_section",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_announcement_text_1"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_announcement_col",
+  "fieldtype": "Column Break",
+  "insert_after": "custom_announcement_text_1",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_announcement_col"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_announcement_text_2",
+  "fieldtype": "Data",
+  "label": "Announcement Text 2",
+  "insert_after": "custom_announcement_col",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_announcement_text_2"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_hero_section",
+  "fieldtype": "Section Break",
+  "label": "Hero",
+  "insert_after": "custom_announcement_text_2",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_hero_section"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_hero_badge",
+  "fieldtype": "Data",
+  "label": "Hero Badge",
+  "insert_after": "custom_hero_section",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_hero_badge"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_hero_heading",
+  "fieldtype": "Data",
+  "label": "Hero Heading",
+  "insert_after": "custom_hero_badge",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_hero_heading"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_hero_heading_highlight",
+  "fieldtype": "Data",
+  "label": "Hero Heading Highlight",
+  "description": "Second line of the heading, rendered in the accent colour.",
+  "insert_after": "custom_hero_heading",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_hero_heading_highlight"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_hero_subtext",
+  "fieldtype": "Small Text",
+  "label": "Hero Subtext",
+  "insert_after": "custom_hero_heading_highlight",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_hero_subtext"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_hero_button_text",
+  "fieldtype": "Data",
+  "label": "Hero Button Text",
+  "insert_after": "custom_hero_subtext",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_hero_button_text"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_hero_button_link",
+  "fieldtype": "Data",
+  "label": "Hero Button Link",
+  "insert_after": "custom_hero_button_text",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_hero_button_link"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_hero_secondary_button_text",
+  "fieldtype": "Data",
+  "label": "Hero Secondary Button Text",
+  "insert_after": "custom_hero_button_link",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_hero_secondary_button_text"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_hero_secondary_button_link",
+  "fieldtype": "Data",
+  "label": "Hero Secondary Button Link",
+  "insert_after": "custom_hero_secondary_button_text",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_hero_secondary_button_link"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_hero_col",
+  "fieldtype": "Column Break",
+  "insert_after": "custom_hero_secondary_button_link",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_hero_col"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_hero_background_image",
+  "fieldtype": "Attach Image",
+  "label": "Hero Background Image",
+  "insert_after": "custom_hero_col",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_hero_background_image"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_categories_section",
+  "fieldtype": "Section Break",
+  "label": "Essential Categories",
+  "insert_after": "custom_hero_background_image",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_categories_section"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_categories_heading",
+  "fieldtype": "Data",
+  "label": "Categories Heading",
+  "insert_after": "custom_categories_section",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_categories_heading"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_categories_subtext",
+  "fieldtype": "Small Text",
+  "label": "Categories Subtext",
+  "insert_after": "custom_categories_heading",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_categories_subtext"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_category_cards",
+  "fieldtype": "Table",
+  "label": "Category Cards",
+  "options": "Ecommerce Category Card",
+  "insert_after": "custom_categories_subtext",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_category_cards"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_promo_section",
+  "fieldtype": "Section Break",
+  "label": "Promotion Banner",
+  "insert_after": "custom_category_cards",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_promo_section"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_promo_title",
+  "fieldtype": "Data",
+  "label": "Promo Title",
+  "insert_after": "custom_promo_section",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_promo_title"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_promo_subtitle",
+  "fieldtype": "Data",
+  "label": "Promo Subtitle",
+  "insert_after": "custom_promo_title",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_promo_subtitle"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_promo_text",
+  "fieldtype": "Small Text",
+  "label": "Promo Text",
+  "insert_after": "custom_promo_subtitle",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_promo_text"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_promo_button_text",
+  "fieldtype": "Data",
+  "label": "Promo Button Text",
+  "insert_after": "custom_promo_text",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_promo_button_text"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_promo_button_link",
+  "fieldtype": "Data",
+  "label": "Promo Button Link",
+  "insert_after": "custom_promo_button_text",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_promo_button_link"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_promo_note",
+  "fieldtype": "Data",
+  "label": "Promo Note",
+  "insert_after": "custom_promo_button_link",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_promo_note"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_promo_col",
+  "fieldtype": "Column Break",
+  "insert_after": "custom_promo_note",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_promo_col"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_promo_image",
+  "fieldtype": "Attach Image",
+  "label": "Promo Image",
+  "insert_after": "custom_promo_col",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_promo_image"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_features_section",
+  "fieldtype": "Section Break",
+  "label": "Trust Features",
+  "insert_after": "custom_promo_image",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_features_section"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_feature_items",
+  "fieldtype": "Table",
+  "label": "Feature Items",
+  "options": "Ecommerce Feature",
+  "insert_after": "custom_features_section",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_feature_items"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_newsletter_section",
+  "fieldtype": "Section Break",
+  "label": "Newsletter",
+  "insert_after": "custom_feature_items",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_newsletter_section"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_newsletter_title",
+  "fieldtype": "Data",
+  "label": "Newsletter Title",
+  "insert_after": "custom_newsletter_section",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_newsletter_title"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_newsletter_subtitle",
+  "fieldtype": "Small Text",
+  "label": "Newsletter Subtitle",
+  "insert_after": "custom_newsletter_title",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_newsletter_subtitle"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_ecom_footer_section",
+  "fieldtype": "Section Break",
+  "label": "Footer Content",
+  "insert_after": "custom_newsletter_subtitle",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_ecom_footer_section"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_footer_description",
+  "fieldtype": "Small Text",
+  "label": "Footer Description",
+  "insert_after": "custom_ecom_footer_section",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_footer_description"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_footer_contact_address",
+  "fieldtype": "Small Text",
+  "label": "Footer Contact Address",
+  "insert_after": "custom_footer_description",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_footer_contact_address"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_footer_contact_phone",
+  "fieldtype": "Data",
+  "label": "Footer Contact Phone",
+  "insert_after": "custom_footer_contact_address",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_footer_contact_phone"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_footer_links",
+  "fieldtype": "Table",
+  "label": "Footer Links",
+  "options": "Ecommerce Footer Link",
+  "insert_after": "custom_footer_contact_phone",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_footer_links"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_seo_section",
+  "fieldtype": "Section Break",
+  "label": "SEO Metadata",
+  "insert_after": "custom_footer_links",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_seo_section"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_meta_title",
+  "fieldtype": "Data",
+  "label": "Meta Title",
+  "insert_after": "custom_seo_section",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_meta_title"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_meta_description",
+  "fieldtype": "Small Text",
+  "label": "Meta Description",
+  "insert_after": "custom_meta_title",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_meta_description"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_meta_keywords",
+  "fieldtype": "Data",
+  "label": "Meta Keywords",
+  "insert_after": "custom_meta_description",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_meta_keywords"
+ },
+ {
+  "doctype": "Custom Field",
+  "dt": "Website Settings",
+  "fieldname": "custom_meta_image",
+  "fieldtype": "Attach Image",
+  "label": "Meta / OG Image",
+  "insert_after": "custom_meta_keywords",
+  "module": "Ecommerce",
+  "name": "Website Settings-custom_meta_image"
+ }
+]

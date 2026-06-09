@@ -1,0 +1,131 @@
+{% extends "templates/base.html" %}
+{% block head_include %}{{ super() }}<link rel="stylesheet" href="/assets/ecommerce/css/landing.css">{% endblock %}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="fe-page">
+	{% include "templates/includes/announce.html" %}
+	{% include "templates/includes/header.html" %}
+
+	<main class="fe-container fe-checkout">
+		<ol class="fe-steps">
+			{% for num, label, active in steps %}
+			<li class="fe-step{% if active %} is-active{% endif %}"><span class="fe-step__num">{{ num }}</span>{{ label }}</li>
+			{% endfor %}
+		</ol>
+
+		<div class="fe-checkout__layout">
+			<div class="fe-checkout__main">
+				<section class="fe-card">
+					<h3 class="fe-card__title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-5-7-11a7 7 0 0 1 14 0c0 6-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg> Shipping Address</h3>
+					<div class="fe-form">
+						<label class="fe-field fe-field--full"><span>Company Name</span><input type="text" name="company" placeholder="e.g. Industrial Solutions Corp"></label>
+						<label class="fe-field fe-field--full"><span>Full Name</span><input type="text" name="full_name" placeholder="John Doe"></label>
+						<label class="fe-field fe-field--full"><span>Street Address</span><input type="text" name="street" placeholder="123 Industrial Way, Suite 500"></label>
+						<label class="fe-field"><span>City</span><input type="text" name="city" placeholder="Chicago"></label>
+						<label class="fe-field"><span>State</span><input type="text" name="state" placeholder="IL"></label>
+						<label class="fe-field"><span>Zip</span><input type="text" name="zip" placeholder="60601"></label>
+						<label class="fe-field fe-field--full"><span>Phone Number</span><input type="text" name="phone" placeholder="+1 (555) 000-0000"></label>
+					</div>
+				</section>
+
+				<section class="fe-card">
+					<h3 class="fe-card__title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="17" r="1.6"/><circle cx="17.5" cy="17" r="1.6"/></svg> Shipping Method</h3>
+					<div class="fe-radios">
+						{% for m in shipping_methods %}
+						<label class="fe-radio{% if m.checked %} is-active{% endif %}">
+							<input type="radio" name="shipping"{% if m.checked %} checked{% endif %}>
+							<span class="fe-radio__dot"></span>
+							<span class="fe-radio__body"><strong>{{ m.title }}</strong><small>{{ m.desc }}</small></span>
+							<span class="fe-radio__price">{{ m.price }}</span>
+						</label>
+						{% endfor %}
+					</div>
+				</section>
+
+				<section class="fe-card">
+					<h3 class="fe-card__title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> Payment Method</h3>
+					<div class="fe-paytiles">
+						{% for pm in payment_methods %}
+						<label class="fe-paytile{% if pm.checked %} is-active{% endif %}">
+							<input type="radio" name="payment"{% if pm.checked %} checked{% endif %}>
+							<span class="fe-paytile__icon">{{ pm.icon | safe }}</span>
+							<span>{{ pm.title }}</span>
+						</label>
+						{% endfor %}
+					</div>
+				</section>
+			</div>
+
+			<aside class="fe-checkout__side">
+				<div class="fe-summary">
+					<h3>Order Summary</h3>
+					<div class="fe-summary__items">
+						{% for it in summary_items %}
+						<div class="fe-summary__item">
+							<div class="fe-summary__thumb"></div>
+							<div class="fe-summary__itemmeta"><strong>{{ it.name }}</strong><small>Qty: {{ it.qty }}</small></div>
+							<span class="fe-summary__itemprice">{{ it.price }}</span>
+						</div>
+						{% endfor %}
+					</div>
+					<div class="fe-summary__row"><span>Subtotal</span><span>{{ summary.subtotal }}</span></div>
+					<div class="fe-summary__row"><span>Shipping Estimate</span><span>{{ summary.shipping }}</span></div>
+					<div class="fe-summary__row"><span>{{ summary.tax_label }}</span><span>{{ summary.tax }}</span></div>
+					<div class="fe-summary__total"><strong>Total</strong><span>{{ summary.total }}</span></div>
+					<button type="button" id="fe-place-order" class="fe-btn fe-btn--gold fe-btn--block">Place Order
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+					</button>
+					<div class="fe-summary__trust"><span>🛡 Secure Checkout</span><span>🏅 Certified B2B Distributor</span></div>
+				</div>
+			</aside>
+		</div>
+	</main>
+
+	{% include "templates/includes/footer.html" %}
+</div>
+{% endblock %}
+
+{% block script %}{{ super() }}
+<script>
+(function () {
+	var btn = document.getElementById("fe-place-order");
+	if (!btn) return;
+	function val(name) { var el = document.querySelector('[name="' + name + '"]'); return el ? el.value : ""; }
+	btn.addEventListener("click", function () {
+		var shipping = (document.querySelector('input[name="shipping"]:checked') || {}).value;
+		var payment = (document.querySelector('input[name="payment"]:checked') || {}).value;
+		var address = {
+			company: val("company"), full_name: val("full_name"), street: val("street"),
+			city: val("city"), state: val("state"), zip: val("zip"), phone: val("phone"),
+		};
+		function reset() { btn.disabled = false; btn.textContent = "Place Order"; }
+		function alert(msg, ind) { if (window.frappe && frappe.show_alert) frappe.show_alert({ message: msg, indicator: ind || "red" }); }
+		function loginRedirect() { window.location.href = "/sign-in?redirect=/checkout"; }
+
+		btn.disabled = true;
+		btn.textContent = "Placing order…";
+
+		frappe.call({
+			method: "ecommerce.api.submit_cart_order",
+			args: { address: JSON.stringify(address), shipping_method: shipping, payment_method: payment },
+			callback: function (r) {
+				var m = r.message || {};
+				if (m.ok) {
+					if (window.feUpdateCartBadge) window.feUpdateCartBadge(0);
+					try { window.localStorage && window.localStorage.removeItem("cart"); } catch (e) {}
+					alert("Order " + m.order + " placed successfully", "green");
+					setTimeout(function () { window.location.href = "/my-account"; }, 900);
+				} else { reset(); alert("Order submission failed. Your cart is saved — please try again."); }
+			},
+			error: function (err) {
+				reset();
+				if (err && (err.status === 403 || err.status === 401)) loginRedirect();
+				else alert("Could not place order. Please try again.");
+			},
+		});
+	});
+})();
+</script>
+{% endblock %}

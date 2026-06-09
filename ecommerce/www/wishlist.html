@@ -1,0 +1,93 @@
+{% extends "templates/base.html" %}
+{% block head_include %}{{ super() }}<link rel="stylesheet" href="/assets/ecommerce/css/landing.css">{% endblock %}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="fe-page">
+	{% include "templates/includes/announce.html" %}
+	{% include "templates/includes/header.html" %}
+
+	<main class="fe-container fe-section">
+		<nav class="fe-crumbs"><a href="/">Home</a><span class="fe-crumbs__sep">›</span><span class="fe-crumbs__cur">My Wishlist</span></nav>
+
+		<div class="fe-section__head fe-section__head--row">
+			<h1 class="fe-pdp__h2">My Wishlist (<span data-wish-count>{{ wishlist_count }}</span> items)</h1>
+		</div>
+
+		<div class="fe-wishlist" data-wishlist-grid>
+			{% if items %}
+			<div class="fe-products">
+				{% for p in items %}
+				<article class="fe-product" data-wish-card="{{ p.sku }}">
+					<a href="/product?item={{ p.sku }}" class="fe-product__media" aria-label="{{ p.name }}"{% if p.image %} style="background-image:url('{{ p.image }}');background-size:cover;background-position:center"{% endif %}>
+						{% if not p.in_stock %}<span class="fe-tag">Out of Stock</span>{% else %}<span class="fe-tag fe-tag--green">In Stock</span>{% endif %}
+						<button type="button" class="fe-wishx" data-wish-remove data-item="{{ p.sku }}" aria-label="Remove from wishlist" title="Remove from wishlist">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+						</button>
+					</a>
+					<div class="fe-product__body">
+						<h4 class="fe-product__name"><a href="/product?item={{ p.sku }}">{{ p.name }}</a></h4>
+						<span class="fe-product__sku">SKU: {{ p.sku }}</span>
+						<div class="fe-product__foot">
+							<span class="fe-product__price">{{ p.price }}</span>
+							<button class="fe-cartbtn" data-add-to-cart data-item="{{ p.sku }}" aria-label="Add to cart">
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.2 11.2A2 2 0 0 0 9.2 16h8.4a2 2 0 0 0 2-1.6L21 7H6"/></svg>
+							</button>
+						</div>
+					</div>
+				</article>
+				{% endfor %}
+			</div>
+			{% endif %}
+			<div class="fe-cart__empty fe-wish-empty"{% if items %} hidden{% endif %}>Your wishlist is empty. <a href="/all-products">Browse products →</a></div>
+		</div>
+	</main>
+
+	{% include "templates/includes/footer.html" %}
+</div>
+{% endblock %}
+
+{% block script %}{{ super() }}
+<script>
+(function () {
+	var grid = document.querySelector("[data-wishlist-grid]");
+	if (!grid) return;
+
+	function refreshCount() {
+		var cards = grid.querySelectorAll("[data-wish-card]");
+		var c = document.querySelector("[data-wish-count]");
+		if (c) c.textContent = cards.length;
+		var products = grid.querySelector(".fe-products");
+		var empty = grid.querySelector(".fe-wish-empty");
+		if (cards.length === 0) {
+			if (products) products.remove();
+			if (empty) empty.removeAttribute("hidden");
+		}
+	}
+
+	grid.addEventListener("click", function (e) {
+		var btn = e.target.closest("[data-wish-remove]");
+		if (!btn) return;
+		e.preventDefault();
+		var item = btn.getAttribute("data-item");
+		var card = grid.querySelector('[data-wish-card="' + (window.CSS && CSS.escape ? CSS.escape(item) : item) + '"]');
+		btn.disabled = true;
+		frappe.call({
+			method: "ecommerce.api.remove_from_wishlist",
+			args: { item_code: item },
+			callback: function (r) {
+				if (card) card.remove();
+				refreshCount();
+				if (window.frappe && frappe.show_alert) frappe.show_alert({ message: (r.message && r.message.message) || "Removed from wishlist", indicator: "blue" });
+			},
+			error: function (err) {
+				btn.disabled = false;
+				if (err && (err.status === 401 || err.status === 403)) { window.location.href = "/sign-in?redirect=/wishlist"; return; }
+				if (window.frappe && frappe.show_alert) frappe.show_alert({ message: "Could not remove item. Please try again.", indicator: "red" });
+			},
+		});
+	});
+})();
+</script>
+{% endblock %}

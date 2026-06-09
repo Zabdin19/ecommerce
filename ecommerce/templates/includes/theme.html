@@ -1,0 +1,15 @@
+{#- Optional theme overrides from Ecommerce Homepage Settings. Each value only
+    overrides the matching CSS variable when the admin has set it, so an empty
+    theme keeps the original design untouched. Expects `chrome.theme`. -#}
+{% set t = chrome.theme %}
+{% if t and (t.primary_color or t.secondary_color or t.header_bg_color or t.button_color or t.font_family) %}
+<style>
+.fe-page {
+	{% if t.header_bg_color %}--navy: {{ t.header_bg_color }}; --navy-2: {{ t.header_bg_color }};{% endif %}
+	{% if t.primary_color %}--ink: {{ t.primary_color }};{% endif %}
+	{% if t.button_color %}--gold: {{ t.button_color }}; --gold-2: {{ t.button_color }};{% endif %}
+	{% if t.secondary_color %}--gold-2: {{ t.secondary_color }};{% endif %}
+	{% if t.font_family %}font-family: {{ t.font_family }};{% endif %}
+}
+</style>
+{% endif %}

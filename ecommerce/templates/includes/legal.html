@@ -1,0 +1,28 @@
+{#- Shared body for backend-managed content pages (Privacy Policy, Terms of
+    Service, …). Expects `page` and `chrome` in context. Reuses the storefront
+    chrome and hero/section styles so the theme stays unchanged. -#}
+<div class="fe-page">
+	{% include "templates/includes/announce.html" %}
+	{% include "templates/includes/header.html" %}
+
+	<section class="fe-hero fe-hero--slim">
+		{% if page.hero_image %}
+		<div class="fe-hero__bg">
+			<div class="fe-hero__slide is-active" style="background-image:url('{{ page.hero_image }}')"></div>
+			<div class="fe-hero__overlay"></div>
+		</div>
+		{% endif %}
+		<div class="fe-container fe-hero__inner">
+			<h1 class="fe-hero__title">{{ page.hero_heading }}</h1>
+			{% if page.hero_description %}<p class="fe-hero__sub">{{ page.hero_description }}</p>{% endif %}
+		</div>
+	</section>
+
+	<section class="fe-section">
+		<div class="fe-container">
+			<div class="fe-legal">{{ page.content | safe }}</div>
+		</div>
+	</section>
+
+	{% include "templates/includes/footer.html" %}
+</div>
