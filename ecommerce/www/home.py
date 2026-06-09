@@ -60,10 +60,10 @@ DEFAULT_FEATURES = [
 ]
 
 DEFAULT_BEST_SELLERS = [
-	{"brand": "DEWALT", "name": "20V MAX XR Brushless Orbital Sander", "sku": "DW-OS-9921", "price": "$189.00", "badge": "Best Seller"},
-	{"brand": "MILWAUKEE", "name": 'M18 FUEL 1/2" High Torque Impact Wrench', "sku": "MW-IW-4410", "price": "$299.00", "badge": "In Stock"},
-	{"brand": "3M SAFETY", "name": "SecureFit Vented Safety Helmet with Visor", "sku": "3M-SH-005", "price": "$45.50", "badge": ""},
-	{"brand": "CAMPBELL HAUSFELD", "name": "20-Gallon Vertical Air Compressor 150 PSI", "sku": "CH-AC-20V", "price": "$549.00", "badge": ""},
+	{"brand": "DEWALT", "name": "20V MAX XR Brushless Orbital Sander", "sku": "DW-OS-9921", "price": "$189.00", "price_value": 189.0, "badge": "Best Seller"},
+	{"brand": "MILWAUKEE", "name": 'M18 FUEL 1/2" High Torque Impact Wrench', "sku": "MW-IW-4410", "price": "$299.00", "price_value": 299.0, "badge": "In Stock"},
+	{"brand": "3M SAFETY", "name": "SecureFit Vented Safety Helmet with Visor", "sku": "3M-SH-005", "price": "$45.50", "price_value": 45.5, "badge": ""},
+	{"brand": "CAMPBELL HAUSFELD", "name": "20-Gallon Vertical Air Compressor 150 PSI", "sku": "CH-AC-20V", "price": "$549.00", "price_value": 549.0, "badge": ""},
 ]
 
 DEFAULT_BRANDS = ["MAKITA", "BOSCH", "DEWALT", "3M SAFETY", "HILTI", "MILWAUKEE"]
@@ -198,11 +198,13 @@ def _featured_products(rows):
 		if not code or not frappe.db.exists("Item", code):
 			continue
 		it = frappe.db.get_value("Item", code, ["item_name", "image", "brand"], as_dict=True) or {}
+		price = get_price(code)
 		out.append({
 			"brand": it.get("brand") or "",
 			"name": it.get("item_name") or code,
 			"sku": code,
-			"price": money(get_price(code)),
+			"price": money(price),
+			"price_value": price,
 			"image": it.get("image"),
 			"badge": (r.get("badge") or "").strip(),
 		})

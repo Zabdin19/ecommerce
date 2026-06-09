@@ -30,12 +30,14 @@ def _badge(stock):
 
 def _card(it):
 	stock = get_stock(it.name)
+	price = get_price(it.name)
 	return {
 		"brand": (it.brand or it.item_group or "").upper(),
 		"sku": it.name,
 		"name": it.item_name or it.name,
 		"rating": _rating(it.name),
-		"price": money(get_price(it.name)),
+		"price": money(price),
+		"price_value": price,
 		"badge": _badge(stock),
 		"image": it.image,
 	}
@@ -105,11 +107,13 @@ def get_best_sellers(limit=4):
 	out = []
 	for it in items:
 		stock = get_stock(it.name)
+		price = get_price(it.name)
 		out.append({
 			"brand": (it.brand or it.item_group or "").upper(),
 			"name": it.item_name or it.name,
 			"sku": it.name,
-			"price": money(get_price(it.name)),
+			"price": money(price),
+			"price_value": price,
 			"badge": "In Stock" if stock > 0 else "",
 			"image": it.image,
 		})
@@ -143,11 +147,13 @@ def get_product_detail(item_code):
 		fields=["name", "item_name", "image"],
 		page_length=4,
 	):
+		r_price = get_price(r.name)
 		related.append({
 			"name": r.item_name or r.name,
 			"subtitle": "SKU: " + r.name,
 			"sku": r.name,
-			"price": money(get_price(r.name)),
+			"price": money(r_price),
+			"price_value": r_price,
 			"badge": "",
 			"image": r.image,
 		})
@@ -161,6 +167,7 @@ def get_product_detail(item_code):
 		"rating": _rating(item_code),
 		"review_count": 0,
 		"price": money(get_price(item_code)),
+		"price_value": get_price(item_code),
 		"old_price": None,
 		"save_label": None,
 		"price_note": "Excl. VAT & Shipping costs",

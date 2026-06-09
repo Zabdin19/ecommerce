@@ -441,6 +441,8 @@ def add_to_cart(item_code, qty=1):
 		frappe.throw(_("Quantity must be greater than zero."))
 	if not frappe.db.exists("Item", item_code):
 		frappe.throw(_("Item not found"))
+	if flt(get_price(item_code)) <= 0:
+		frappe.throw(_("This item is not available for purchase."))
 
 	session = get_current_customer_session()
 	if session:
