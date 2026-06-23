@@ -50,8 +50,14 @@
 		var usr = form.querySelector("[name=usr]").value;
 		var pwd = form.querySelector("[name=pwd]").value;
 		var redirect = form.getAttribute("data-redirect") || "/my-account";
+		function reset() {
+			btn.disabled = false;
+			btn.classList.remove("is-loading");
+			btn.innerHTML = "Login →";
+		}
 		btn.disabled = true;
-		btn.textContent = "Signing in…";
+		btn.classList.add("is-loading");
+		btn.innerHTML = '<span class="fe-spinner"></span>Signing in…';
 		frappe.call({
 			method: "ecommerce.api.login_customer",
 			args: { email: usr, password: pwd },
@@ -60,14 +66,12 @@
 				if (m.ok) {
 					window.location.href = redirect || "/my-account";
 				} else {
-					btn.disabled = false;
-					btn.textContent = "Login →";
+					reset();
 					if (window.frappe && frappe.show_alert) frappe.show_alert({ message: m.message || "Invalid email or password.", indicator: "red" });
 				}
 			},
 			error: function () {
-				btn.disabled = false;
-				btn.textContent = "Login →";
+				reset();
 				if (window.frappe && frappe.show_alert) frappe.show_alert({ message: "Invalid email or password.", indicator: "red" });
 			},
 		});

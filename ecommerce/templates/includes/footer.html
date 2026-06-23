@@ -83,8 +83,12 @@
 
 	// Logout
 	document.addEventListener("click", function (e) {
-		if (!e.target.closest("#fe-logout")) return;
+		var link = e.target.closest("#fe-logout");
+		if (!link) return;
 		e.preventDefault();
+		if (link.dataset.busy) return;
+		link.dataset.busy = "1";
+		link.innerHTML = '<span class="fe-spinner"></span>Logging out…';
 		frappe.call({
 			method: "ecommerce.api.logout_customer",
 			callback: function (r) { window.location.href = (r.message && r.message.redirect) || "/sign-in"; },

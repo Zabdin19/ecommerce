@@ -69,8 +69,14 @@
 		if (password.length < 8) { alert("Password must be at least 8 characters long."); return; }
 		if (password !== confirm) { alert("Passwords do not match."); return; }
 
+		function reset() {
+			btn.disabled = false;
+			btn.classList.remove("is-loading");
+			btn.innerHTML = "Create Account →";
+		}
 		btn.disabled = true;
-		btn.textContent = "Creating account…";
+		btn.classList.add("is-loading");
+		btn.innerHTML = '<span class="fe-spinner"></span>Creating account…';
 		frappe.call({
 			method: "ecommerce.api.register_customer",
 			args: { first_name: first, last_name: last, email: email, phone: phone, password: password, confirm_password: confirm },
@@ -78,15 +84,14 @@
 				var m = r.message || {};
 				alert(m.message || "Done", m.ok ? "green" : "red");
 				if (m.ok) {
+					// Keep the spinner running while we redirect to sign-in.
 					setTimeout(function () { window.location.href = m.redirect || "/sign-in"; }, 1200);
 				} else {
-					btn.disabled = false;
-					btn.textContent = "Create Account →";
+					reset();
 				}
 			},
 			error: function () {
-				btn.disabled = false;
-				btn.textContent = "Create Account →";
+				reset();
 				alert("Something went wrong. Please try again.");
 			},
 		});
