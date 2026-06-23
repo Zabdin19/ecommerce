@@ -57,10 +57,18 @@
 
 			<section class="fe-plp__main">
 				<div class="fe-plp__toolbar">
-					<span class="fe-plp__count">Showing 1-{{ products|length }} of {{ result_count }} results</span>
-					<div class="fe-select">Sort by: Newest Arrivals
-						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-					</div>
+					<span class="fe-plp__count">Showing {{ range_start }}-{{ range_end }} of {{ result_count }} results</span>
+					<details class="fe-sort">
+						<summary class="fe-select">
+							<span>{{ sort_label }}</span>
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+						</summary>
+						<ul class="fe-sort__menu">
+							{% for value, label in sort_options %}
+							<li><a href="{{ filter_query }}sort={{ value }}"{% if value == sort %} class="is-active"{% endif %}>{{ label }}</a></li>
+							{% endfor %}
+						</ul>
+					</details>
 				</div>
 
 				<div class="fe-products fe-products--plp">
@@ -84,15 +92,19 @@
 					{% endfor %}
 				</div>
 
+				{% if total_pages > 1 %}
 				<div class="fe-pagination">
-					<button class="fe-page-nav" aria-label="Previous">‹</button>
+					{% if page > 1 %}<a class="fe-page-nav" href="{{ base_query }}page={{ page - 1 }}" aria-label="Previous">‹</a>
+					{% else %}<span class="fe-page-nav is-disabled" aria-label="Previous" aria-disabled="true">‹</span>{% endif %}
 					{% for n in page_pages %}
-						{% if n == 1 %}<button class="fe-page-num is-active">{{ n }}</button>
-						{% elif n == "…" %}<span class="fe-page-dots">{{ n }}</span>
-						{% else %}<button class="fe-page-num">{{ n }}</button>{% endif %}
+						{% if n == "…" %}<span class="fe-page-dots">{{ n }}</span>
+						{% elif n == page %}<span class="fe-page-num is-active" aria-current="page">{{ n }}</span>
+						{% else %}<a class="fe-page-num" href="{{ base_query }}page={{ n }}">{{ n }}</a>{% endif %}
 					{% endfor %}
-					<button class="fe-page-nav" aria-label="Next">›</button>
+					{% if page < total_pages %}<a class="fe-page-nav" href="{{ base_query }}page={{ page + 1 }}" aria-label="Next">›</a>
+					{% else %}<span class="fe-page-nav is-disabled" aria-label="Next" aria-disabled="true">›</span>{% endif %}
 				</div>
+				{% endif %}
 			</section>
 		</div>
 	</main>

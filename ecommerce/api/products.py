@@ -14,9 +14,19 @@ import urllib.parse
 import frappe
 from frappe.utils import cint
 
-from ecommerce.api.common import get_price, get_stock, money
+from ecommerce.api.common import get_price, get_stock, money, price_list
 
 PAGE_SIZE = 12
+
+
+def _price_map():
+	"""Return ``{item_code: price_list_rate}`` for the storefront price list in one query."""
+	rows = frappe.get_all(
+		"Item Price",
+		filters={"price_list": price_list(), "selling": 1},
+		fields=["item_code", "price_list_rate"],
+	)
+	return {r.item_code: r.price_list_rate for r in rows}
 
 
 def _rating(item_code):
@@ -54,11 +64,27 @@ def list_products(q=None, item_group=None, brand=None, sort=None, page=1, page_s
 	if q:
 		or_filters = [["item_name", "like", f"%{q}%"], ["item_code", "like", f"%{q}%"]]
 
-	order_by = "modified desc"
-	if sort == "name":
-		order_by = "item_name asc"
-	elif sort == "newest":
-		order_by = "creation desc"
+	fields = ["name", "item_name", "item_group", "brand", "image"]
+	start = (page - 1) * page_size
+
+	# Price sorts need the rate from Item Price, which isn't a column on Item,
+	# so sort in Python over the full result set, then paginate.
+	if sort in ("price_asc", "price_desc"):
+		rows = frappe.get_all("Item", filters=filters, or_filters=or_filters, fields=fields, limit_page_length=0)
+		total = len(rows)
+		prices = _price_map()
+		rows.sort(key=lambda it: prices.get(it.name, 0.0), reverse=(sort == "price_desc"))
+		page_rows = rows[start : start + page_size]
+		return [_card(it) for it in page_rows], total
+
+	# SQL-orderable sorts.
+	order_map = {
+		"asc": "name asc",          # Ascending Order (by SKU/code)
+		"desc": "name desc",        # Descending Order
+		"name_asc": "item_name asc",  # A - Z Order
+		"name_desc": "item_name desc",  # Z - A Order
+	}
+	order_by = order_map.get(sort, "creation desc")  # default: newest first
 
 	all_names = frappe.get_all("Item", filters=filters, or_filters=or_filters, fields=["name"], limit_page_length=0)
 	total = len(all_names)
@@ -67,9 +93,9 @@ def list_products(q=None, item_group=None, brand=None, sort=None, page=1, page_s
 		"Item",
 		filters=filters,
 		or_filters=or_filters,
-		fields=["name", "item_name", "item_group", "brand", "image"],
+		fields=fields,
 		order_by=order_by,
-		start=(page - 1) * page_size,
+		start=start,
 		page_length=page_size,
 	)
 	return [_card(it) for it in items], total

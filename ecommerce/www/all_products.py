@@ -25,6 +25,27 @@ def get_context(context):
 
 	rows, total = products.list_products(q=q, item_group=item_group, brand=brand, sort=sort, page=page)
 
+	from urllib.parse import urlencode
+
+	total_pages = max(1, -(-total // products.PAGE_SIZE))  # ceil division
+	page = min(max(page, 1), total_pages)
+	# Query-string prefix carrying the active filters so paging keeps them.
+	active_filters = [(k, v) for k, v in (("q", q), ("item_group", item_group), ("brand", brand), ("sort", sort)) if v]
+	base_query = "?" + urlencode(active_filters) + ("&" if active_filters else "")
+	# Filter-only prefix (no sort/page) used by the Sort dropdown links.
+	filter_only = [(k, v) for k, v in (("q", q), ("item_group", item_group), ("brand", brand)) if v]
+	filter_query = "?" + urlencode(filter_only) + ("&" if filter_only else "")
+
+	sort_options = [
+		("asc", "Ascending Order"),
+		("desc", "Descending Order"),
+		("price_asc", "Low - High Price"),
+		("price_desc", "High - Low Price"),
+		("name_asc", "A - Z Order"),
+		("name_desc", "Z - A Order"),
+	]
+	sort_label = dict(sort_options).get(sort, "Sort")
+
 	context.chrome = get_chrome()
 	context.products = rows
 	context.categories = products.get_categories()
@@ -32,8 +53,17 @@ def get_context(context):
 	context.result_count = total
 	context.page_count = len(rows)
 	context.page = page
+	context.total_pages = total_pages
+	context.base_query = base_query
+	context.range_start = (total and (page - 1) * products.PAGE_SIZE + 1) or 0
+	context.range_end = (page - 1) * products.PAGE_SIZE + len(rows)
 	context.page_pages = products.page_numbers(total, page)
 	context.active_group = item_group
+	context.active_brand = brand or ""
+	context.sort = sort
+	context.sort_options = sort_options
+	context.sort_label = sort_label
+	context.filter_query = filter_query
 	context.search_q = q or ""
 	context.current_year = frappe.utils.now_datetime().year
 	context.no_cache = 1
