@@ -399,7 +399,11 @@
 .fe-filters { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 20px; position: sticky; top: 16px; }
 .fe-filters__title { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 800; color: var(--navy); margin: 0 0 16px; }
 .fe-filters__title svg { width: 18px; height: 18px; }
-.fe-filters__cats { list-style: none; margin: 0 0 4px; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.fe-filters__cats { list-style: none; margin: 0 0 4px; padding: 0; display: flex; flex-direction: column; gap: 2px; max-height: 360px; overflow-y: auto; overscroll-behavior: contain; }
+.fe-filters__cats::-webkit-scrollbar { width: 8px; }
+.fe-filters__cats::-webkit-scrollbar-thumb { background: #d4dae6; border-radius: 8px; }
+.fe-filters__cats::-webkit-scrollbar-thumb:hover { background: #c0c8d8; }
+.fe-filters__cats::-webkit-scrollbar-track { background: transparent; }
 .fe-filters__cats a { display: flex; justify-content: space-between; padding: 9px 10px; border-radius: 8px; font-size: 14px; color: var(--muted); }
 .fe-filters__cats a:hover { background: #f4f6fb; }
 .fe-filters__cats a.is-active { background: #eef2fb; color: var(--navy); font-weight: 700; }

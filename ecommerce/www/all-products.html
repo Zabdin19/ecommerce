@@ -92,16 +92,18 @@
 					{% endfor %}
 				</div>
 
-				{% if total_pages > 1 %}
+				{% set _total_pages = total_pages | default(1, true) %}
+				{% set _page = page | default(1, true) %}
+				{% if _total_pages > 1 %}
 				<div class="fe-pagination">
-					{% if page > 1 %}<a class="fe-page-nav" href="{{ base_query }}page={{ page - 1 }}" aria-label="Previous">‹</a>
+					{% if _page > 1 %}<a class="fe-page-nav" href="{{ base_query }}page={{ _page - 1 }}" aria-label="Previous">‹</a>
 					{% else %}<span class="fe-page-nav is-disabled" aria-label="Previous" aria-disabled="true">‹</span>{% endif %}
-					{% for n in page_pages %}
+					{% for n in page_pages | default([], true) %}
 						{% if n == "…" %}<span class="fe-page-dots">{{ n }}</span>
-						{% elif n == page %}<span class="fe-page-num is-active" aria-current="page">{{ n }}</span>
+						{% elif n == _page %}<span class="fe-page-num is-active" aria-current="page">{{ n }}</span>
 						{% else %}<a class="fe-page-num" href="{{ base_query }}page={{ n }}">{{ n }}</a>{% endif %}
 					{% endfor %}
-					{% if page < total_pages %}<a class="fe-page-nav" href="{{ base_query }}page={{ page + 1 }}" aria-label="Next">›</a>
+					{% if _page < _total_pages %}<a class="fe-page-nav" href="{{ base_query }}page={{ _page + 1 }}" aria-label="Next">›</a>
 					{% else %}<span class="fe-page-nav is-disabled" aria-label="Next" aria-disabled="true">›</span>{% endif %}
 				</div>
 				{% endif %}
