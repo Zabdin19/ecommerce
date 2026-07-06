@@ -142,7 +142,9 @@ def login(email=None, password=None):
 		as_dict=True,
 	)
 	if not account or not account.enabled or not _verify_password(password, account.password_hash):
-		frappe.local.response["http_status_code"] = 401
+		# Return 200 with ok=False so the storefront can show its own inline
+		# error. A 401 here would trigger Frappe's global "session expired"
+		# handler and leave the login button stuck on "Signing in…".
 		return {"ok": False, "message": "Invalid email or password."}
 
 	token = secrets.token_urlsafe(32)

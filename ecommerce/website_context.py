@@ -47,7 +47,7 @@ DEFAULT_LOGO_ON_DARK = "/assets/ecommerce/images/logo-light.svg"
 DEFAULT_LOGO_ON_LIGHT = "/assets/ecommerce/images/logo.svg"
 
 DEFAULT_FOOTER_DESCRIPTION = (
-	"Frappe Ecommerce is the leading wholesale distributor of industrial "
+	"Destro Ecommerce is the leading wholesale distributor of industrial "
 	"equipment, electrical supplies, and technical components. Serving global "
 	"enterprises since 1984."
 )
@@ -76,7 +76,7 @@ def get_chrome():
 	def hpval(fieldname, default=""):
 		return ((hp.get(fieldname) if hp else None) or "").strip() or default
 
-	brand = val("brand") or "Frappe Ecommerce"
+	brand = val("brand") or "Destro Ecommerce"
 	uploaded_logo = (hp.get("header_logo") if hp else None) or settings.get("banner_image") or settings.get("app_logo")
 
 	# Storefront login state is intentionally separate from Frappe/Desk sid.
@@ -121,7 +121,7 @@ def get_chrome():
 		footer_contact_address=val("custom_footer_contact_address", "1200 Industrial Way, Suite 400, Chicago, IL"),
 		footer_contact_phone=val("custom_footer_contact_phone", "1-800-FRAPPE-01"),
 		footer_columns=footer_columns(settings.get("custom_footer_links")),
-		copyright=val("copyright", "Frappe Ecommerce. All Rights Reserved."),
+		copyright=val("copyright", "Destro Ecommerce. All Rights Reserved."),
 		cart_count=cart_qty,
 		theme=theme,
 		logged_in=logged_in,
