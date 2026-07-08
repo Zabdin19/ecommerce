@@ -69,7 +69,7 @@ DEFAULT_BEST_SELLERS = [
 DEFAULT_BRANDS = ["MAKITA", "BOSCH", "DEWALT", "3M SAFETY", "HILTI", "MILWAUKEE"]
 
 DEFAULT_HERO_SUBTEXT = (
-	"Streamline your B2B operations with over 500,000 SKUs from world-leading "
+	"Streamline your B2B operations with over 10,000 SKUs from world-leading "
 	"manufacturers. Quality verified, logistics guaranteed."
 )
 
@@ -96,7 +96,7 @@ def get_context(context):
 		hero_button_text=val("hero_button_text", "Shop Now"),
 		hero_button_link=val("hero_button_link", "/all-products"),
 		hero_secondary_button_text=val("hero_secondary_button_text", "Request a Quote"),
-		hero_secondary_button_link=val("hero_secondary_button_link", "/sign-in"),
+		hero_secondary_button_link=val("hero_secondary_button_link", "/request-quote"),
 		hero_background_image=(hp.get("hero_background_image") if hp else None),
 		hero_images=_hero_images(hp),
 		# Essential categories

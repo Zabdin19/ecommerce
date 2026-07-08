@@ -17,7 +17,7 @@
 				</div>
 				<nav class="fe-dash__nav">
 					{% for n in nav %}
-					<a href="#" class="{% if n.active %}is-active{% endif %}">{{ n.label }}</a>
+					<a href="#{{ n.key }}" data-tab="{{ n.key }}" class="{% if n.active %}is-active{% endif %}">{{ n.label }}</a>
 					{% endfor %}
 				</nav>
 				<div class="fe-dash__user">
@@ -30,50 +30,109 @@
 				<h1 class="fe-dash__welcome">Welcome back, {{ account.first_name }} {{ account.last_name }}</h1>
 				<p class="fe-dash__lead">Manage your industrial inventory and procurement pipeline from your centralized dashboard.</p>
 
-				<div class="fe-stats">
-					{% for s in stats %}
-					<div class="fe-stat">
-						<div class="fe-stat__top"><span class="fe-stat__tag">{{ s.tag }}</span></div>
-						<span class="fe-stat__label">{{ s.label }}</span>
-						<span class="fe-stat__value">{{ s.value }}</span>
+				<!-- Dashboard -->
+				<div class="fe-dash__panel" data-panel="dashboard">
+					<div class="fe-stats">
+						{% for s in stats %}
+						<div class="fe-stat">
+							<div class="fe-stat__top"><span class="fe-stat__tag">{{ s.tag }}</span></div>
+							<span class="fe-stat__label">{{ s.label }}</span>
+							<span class="fe-stat__value">{{ s.value }}</span>
+						</div>
+						{% endfor %}
 					</div>
-					{% endfor %}
+
+					<div class="fe-dash__cards">
+						<div class="fe-card">
+							<div class="fe-card__head"><h3>Account Details</h3><a href="#settings" data-tab="settings" class="fe-link">View Settings</a></div>
+							<div class="fe-dash__grid">
+								<div><small>First Name</small><strong>{{ account.first_name }}</strong></div>
+								<div><small>Last Name</small><strong>{{ account.last_name }}</strong></div>
+								<div><small>Corporate Email</small><strong>{{ account.email }}</strong></div>
+								<div><small>Phone Number</small><strong>{{ account.phone }}</strong></div>
+							</div>
+						</div>
+						<div class="fe-card">
+							<div class="fe-card__head"><h3>Primary Address</h3></div>
+							<strong class="fe-dash__addrlabel">{{ address.label }}</strong>
+							<address class="fe-dash__addr">{% for line in address.lines %}{{ line }}<br>{% endfor %}</address>
+							<a href="#addresses" data-tab="addresses" class="fe-btn fe-btn--outline">Manage Addresses</a>
+						</div>
+					</div>
+
+					<div class="fe-card">
+						<div class="fe-card__head"><h3>Recent Orders</h3><a href="#orders" data-tab="orders" class="fe-btn fe-btn--gold">View All History</a></div>
+						{% if recent_orders %}
+						<table class="fe-orders">
+							<thead><tr><th>Order ID</th><th>Date</th><th>Status</th><th>Total</th></tr></thead>
+							<tbody>
+								{% for o in recent_orders %}
+								<tr>
+									<td class="fe-orders__id">{{ o.id }}</td>
+									<td>{{ o.date }}</td>
+									<td><span class="fe-pill fe-pill--{{ o.status_class }}">{{ o.status }}</span></td>
+									<td>{{ o.total }}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+						{% else %}<p class="fe-dash__empty">You have no orders yet.</p>{% endif %}
+					</div>
 				</div>
 
-				<div class="fe-dash__cards">
+				<!-- Orders -->
+				<div class="fe-dash__panel" data-panel="orders" hidden>
 					<div class="fe-card">
-						<div class="fe-card__head"><h3>Account Details</h3><a href="#" class="fe-link">Edit Profile</a></div>
+						<div class="fe-card__head"><h3>Order History</h3></div>
+						{% if all_orders %}
+						<table class="fe-orders">
+							<thead><tr><th>Order ID</th><th>Date</th><th>Status</th><th>Total</th></tr></thead>
+							<tbody>
+								{% for o in all_orders %}
+								<tr>
+									<td class="fe-orders__id">{{ o.id }}</td>
+									<td>{{ o.date }}</td>
+									<td><span class="fe-pill fe-pill--{{ o.status_class }}">{{ o.status }}</span></td>
+									<td>{{ o.total }}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+						{% else %}<p class="fe-dash__empty">You have no orders yet.</p>{% endif %}
+					</div>
+				</div>
+
+				<!-- Addresses -->
+				<div class="fe-dash__panel" data-panel="addresses" hidden>
+					<div class="fe-card">
+						<div class="fe-card__head"><h3>Addresses</h3></div>
+						{% if addresses %}
+						<div class="fe-dash__cards">
+							{% for a in addresses %}
+							<div class="fe-card fe-card--sub">
+								<strong class="fe-dash__addrlabel">{{ a.label }}{% if a.is_primary %} <span class="fe-pill fe-pill--delivered">Primary</span>{% endif %}</strong>
+								<address class="fe-dash__addr">{% for line in a.lines %}{{ line }}<br>{% endfor %}</address>
+							</div>
+							{% endfor %}
+						</div>
+						{% else %}<p class="fe-dash__empty">No addresses on file. A delivery address is saved when you place an order at checkout.</p>{% endif %}
+					</div>
+				</div>
+
+				<!-- Settings -->
+				<div class="fe-dash__panel" data-panel="settings" hidden>
+					<div class="fe-card">
+						<div class="fe-card__head"><h3>Profile Settings</h3></div>
 						<div class="fe-dash__grid">
 							<div><small>First Name</small><strong>{{ account.first_name }}</strong></div>
 							<div><small>Last Name</small><strong>{{ account.last_name }}</strong></div>
 							<div><small>Corporate Email</small><strong>{{ account.email }}</strong></div>
 							<div><small>Phone Number</small><strong>{{ account.phone }}</strong></div>
+							<div><small>Account ID</small><strong>{{ account.account_id }}</strong></div>
+							<div><small>Role</small><strong>{{ account.role }}</strong></div>
 						</div>
+						<a href="#" id="fe-logout" class="fe-btn fe-btn--outline">Log Out</a>
 					</div>
-					<div class="fe-card">
-						<div class="fe-card__head"><h3>Primary Address</h3></div>
-						<strong class="fe-dash__addrlabel">{{ address.label }}</strong>
-						<address class="fe-dash__addr">{% for line in address.lines %}{{ line }}<br>{% endfor %}</address>
-						<button class="fe-btn fe-btn--outline">Manage Addresses</button>
-					</div>
-				</div>
-
-				<div class="fe-card">
-					<div class="fe-card__head"><h3>Recent Orders</h3><button class="fe-btn fe-btn--gold">View All History</button></div>
-					<table class="fe-orders">
-						<thead><tr><th>Order ID</th><th>Date</th><th>Status</th><th>Total</th><th>Action</th></tr></thead>
-						<tbody>
-							{% for o in recent_orders %}
-							<tr>
-								<td class="fe-orders__id">{{ o.id }}</td>
-								<td>{{ o.date }}</td>
-								<td><span class="fe-pill fe-pill--{{ o.status_class }}">{{ o.status }}</span></td>
-								<td>{{ o.total }}</td>
-								<td><a href="#" class="fe-link">Details</a></td>
-							</tr>
-							{% endfor %}
-						</tbody>
-					</table>
 				</div>
 			</section>
 		</div>
@@ -81,4 +140,42 @@
 
 	{% include "templates/includes/footer.html" %}
 </div>
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+<script>
+(function () {
+	var nav = document.querySelector(".fe-dash__nav");
+	var panels = document.querySelectorAll(".fe-dash__panel");
+	if (!panels.length) return;
+
+	function show(key) {
+		var found = false;
+		panels.forEach(function (p) {
+			var match = p.getAttribute("data-panel") === key;
+			p.hidden = !match;
+			if (match) found = true;
+		});
+		if (!found) { show("dashboard"); return; }
+		document.querySelectorAll(".fe-dash__nav a[data-tab]").forEach(function (a) {
+			a.classList.toggle("is-active", a.getAttribute("data-tab") === key);
+		});
+	}
+
+	// Any link with data-tab switches panels (sidebar nav + in-card buttons).
+	document.addEventListener("click", function (e) {
+		var link = e.target.closest("[data-tab]");
+		if (!link) return;
+		e.preventDefault();
+		var key = link.getAttribute("data-tab");
+		show(key);
+		if (history.replaceState) history.replaceState(null, "", "#" + key);
+	});
+
+	// Honor a #hash on load (e.g. arriving at /my-account#orders).
+	var initial = (location.hash || "").replace("#", "");
+	show(["dashboard", "orders", "addresses", "settings"].indexOf(initial) >= 0 ? initial : "dashboard");
+})();
+</script>
 {% endblock %}

@@ -1,0 +1,43 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "full_name",
+  "company_name",
+  "email",
+  "phone",
+  "square_footage",
+  "message",
+  "type_of_business",
+  "status"
+ ],
+ "fields": [
+  {"fieldname": "full_name", "fieldtype": "Data", "in_list_view": 1, "label": "Full Name", "reqd": 1},
+  {"fieldname": "company_name", "fieldtype": "Data", "in_list_view": 1, "label": "Company Name"},
+  {"fieldname": "email", "fieldtype": "Data", "in_list_view": 1, "label": "Email", "options": "Email", "reqd": 1},
+  {"fieldname": "phone", "fieldtype": "Data", "label": "Phone Number"},
+  {"fieldname": "square_footage", "fieldtype": "Data", "label": "Square Footage"},
+  {"fieldname": "message", "fieldtype": "Text", "label": "Message"},
+  {"fieldname": "type_of_business", "fieldtype": "Select", "in_list_view": 1, "label": "Type of Business", "options": "\nRetailer\nWholesaler\nDistributor\nManufacturer\nOther"},
+  {"fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "New\nReviewed\nQuoted\nClosed", "default": "New"}
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Ecommerce",
+ "name": "Ecommerce Quote Request",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "delete": 1, "email": 1, "print": 1, "read": 1, "role": "System Manager", "share": 1, "write": 1},
+  {"create": 1, "delete": 1, "email": 1, "print": 1, "read": 1, "role": "Website Manager", "share": 1, "write": 1}
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "full_name",
+ "track_changes": 1
+}

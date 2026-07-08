@@ -78,30 +78,44 @@ def ensure_customer(user):
 	return customer.name
 
 
-def _primary_address(customer):
-	if not customer:
-		return None
-	addr_name = frappe.db.get_value(
-		"Dynamic Link",
-		{"link_doctype": "Customer", "link_name": customer, "parenttype": "Address"},
-		"parent",
-	)
-	if not addr_name:
-		return None
-	a = frappe.db.get_value(
-		"Address", addr_name,
-		["address_title", "address_line1", "address_line2", "city", "state", "pincode", "country"],
-		as_dict=True,
-	)
-	if not a:
-		return None
+def _fmt_address(a):
 	lines = [x for x in [
 		a.address_line1,
 		a.address_line2,
 		", ".join([p for p in [a.city, a.state, a.pincode] if p]),
 		a.country,
 	] if x]
-	return {"label": a.address_title or "Primary Address", "lines": lines}
+	return {"label": a.address_title or "Address", "lines": lines}
+
+
+def _all_addresses(customer):
+	"""Every Address linked to the customer, primary first."""
+	if not customer:
+		return []
+	links = frappe.get_all(
+		"Dynamic Link",
+		filters={"link_doctype": "Customer", "link_name": customer, "parenttype": "Address"},
+		fields=["parent"],
+	)
+	out = []
+	for l in links:
+		a = frappe.db.get_value(
+			"Address", l.parent,
+			["address_title", "address_line1", "address_line2", "city", "state", "pincode", "country", "is_primary_address"],
+			as_dict=True,
+		)
+		if a:
+			out.append({**_fmt_address(a), "is_primary": bool(a.is_primary_address)})
+	out.sort(key=lambda x: 0 if x.get("is_primary") else 1)
+	return out
+
+
+def _primary_address(customer):
+	addresses = _all_addresses(customer)
+	if not addresses:
+		return None
+	primary = addresses[0]
+	return {"label": primary["label"] or "Primary Address", "lines": primary["lines"]}
 
 
 def _status_class(status):
@@ -135,22 +149,27 @@ def get_dashboard():
 	}
 
 	address = _primary_address(customer) or {"label": "No address on file", "lines": ["Add a delivery address at checkout."]}
+	addresses = _all_addresses(customer)
 
 	so_filters = {"docstatus": ["<", 2]}
 	if customer:
 		so_filters["customer"] = customer
-	orders = frappe.get_all(
+
+	def _fmt_orders(rows):
+		return [{
+			"id": "#" + o.name,
+			"date": formatdate(o.transaction_date, "MMM dd, yyyy"),
+			"status": o.status,
+			"status_class": _status_class(o.status),
+			"total": money(o.grand_total),
+		} for o in rows]
+
+	all_orders = _fmt_orders(frappe.get_all(
 		"Sales Order", filters=so_filters,
 		fields=["name", "transaction_date", "status", "grand_total"],
-		order_by="transaction_date desc", page_length=6,
-	)
-	recent_orders = [{
-		"id": "#" + o.name,
-		"date": formatdate(o.transaction_date, "MMM dd, yyyy"),
-		"status": o.status,
-		"status_class": _status_class(o.status),
-		"total": money(o.grand_total),
-	} for o in orders]
+		order_by="transaction_date desc", page_length=100,
+	))
+	recent_orders = all_orders[:6]
 
 	last30 = frappe.db.count("Sales Order", {**so_filters, "transaction_date": [">=", add_days(today(), -30)]})
 	ytd_rows = frappe.get_all(
@@ -175,4 +194,7 @@ def get_dashboard():
 		{"label": "Addresses", "key": "addresses", "active": False},
 		{"label": "Settings", "key": "settings", "active": False},
 	]
-	return {"account": account, "address": address, "nav": nav, "stats": stats, "recent_orders": recent_orders}
+	return {
+		"account": account, "address": address, "addresses": addresses,
+		"nav": nav, "stats": stats, "recent_orders": recent_orders, "all_orders": all_orders,
+	}

@@ -27,7 +27,7 @@ DEFAULT_STORY_BODY = (
 	"the most trusted names in industrial distribution. We supply the tools, "
 	"equipment, and components that keep factories, job sites, and supply chains "
 	"moving.</p>"
-	"<p>Today we serve thousands of enterprise customers with over 500,000 SKUs "
+	"<p>Today we serve thousands of enterprise customers with over 10,000 SKUs "
 	"from the world's leading manufacturers — backed by the logistics network "
 	"and technical expertise our partners depend on.</p>"
 )
@@ -98,7 +98,7 @@ def get_context(context):
 		return (ap.get(fieldname) if ap else None) or None
 
 	about = frappe._dict(
-		page_title=val("page_title", "About Destro Ecommerce"),
+		page_title=val("page_title", "About Dollar Basket"),
 		page_subtitle=val("page_subtitle", DEFAULT_SUBTITLE),
 		hero_image=(ap.get("hero_image") if ap else None),
 		story_heading=val("story_heading", "Our Story"),

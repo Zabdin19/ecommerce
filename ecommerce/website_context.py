@@ -26,7 +26,7 @@ DEFAULT_FOOTER_COLUMNS = [
 			{"label": "Bulk Distribution", "url": "/all-products"},
 			{"label": "API Documentation", "url": "#"},
 			{"label": "Logistics Services", "url": "#"},
-			{"label": "Request Quote", "url": "/sign-in"},
+			{"label": "Request Quote", "url": "/request-quote"},
 		],
 	},
 	{
@@ -47,7 +47,7 @@ DEFAULT_LOGO_ON_DARK = "/assets/ecommerce/images/logo-light.svg"
 DEFAULT_LOGO_ON_LIGHT = "/assets/ecommerce/images/logo.svg"
 
 DEFAULT_FOOTER_DESCRIPTION = (
-	"Destro Ecommerce is the leading wholesale distributor of industrial "
+	"Dollar Basket is the leading wholesale distributor of industrial "
 	"equipment, electrical supplies, and technical components. Serving global "
 	"enterprises since 1984."
 )
@@ -76,7 +76,7 @@ def get_chrome():
 	def hpval(fieldname, default=""):
 		return ((hp.get(fieldname) if hp else None) or "").strip() or default
 
-	brand = val("brand") or "Destro Ecommerce"
+	brand = val("brand") or "Dollar Basket"
 	uploaded_logo = (hp.get("header_logo") if hp else None) or settings.get("banner_image") or settings.get("app_logo")
 
 	# Storefront login state is intentionally separate from Frappe/Desk sid.
@@ -118,10 +118,11 @@ def get_chrome():
 		announcement_text_2=hpval("topbar_distributor_text", val("custom_announcement_text_2", "Official B2B Distributor")),
 		nav_items=_mark_active(nav_items(menu_rows)),
 		footer_description=val("custom_footer_description", DEFAULT_FOOTER_DESCRIPTION),
-		footer_contact_address=val("custom_footer_contact_address", "1200 Industrial Way, Suite 400, Chicago, IL"),
-		footer_contact_phone=val("custom_footer_contact_phone", "1-800-FRAPPE-01"),
+		footer_contact_address=val("custom_footer_contact_address", "11015 North Sam Houston Pkwy W, Houston, TX 77064 United States"),
+		footer_contact_phone=val("custom_footer_contact_phone", "+1 281-822-1544"),
+		footer_contact_email=val("custom_footer_contact_email", "info@dollorbasket.com"),
 		footer_columns=footer_columns(settings.get("custom_footer_links")),
-		copyright=val("copyright", "Destro Ecommerce. All Rights Reserved."),
+		copyright=val("copyright", "Dollar Basket. All Rights Reserved."),
 		cart_count=cart_qty,
 		theme=theme,
 		logged_in=logged_in,

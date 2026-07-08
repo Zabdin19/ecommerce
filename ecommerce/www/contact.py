@@ -20,9 +20,9 @@ DEFAULT_SUBTITLE = (
 	"Have a question about bulk orders, pricing, or logistics? Our team is here "
 	"to help — reach out and we'll respond within one business day."
 )
-DEFAULT_EMAIL = "support@frappe-ecommerce.com"
-DEFAULT_PHONE = "1-800-FRAPPE-01"
-DEFAULT_ADDRESS = "1200 Industrial Way, Suite 400, Chicago, IL 60601"
+DEFAULT_EMAIL = "info@dollorbasket.com"
+DEFAULT_PHONE = "+1 281-822-1544"
+DEFAULT_ADDRESS = "11015 North Sam Houston Pkwy W,Houston, TX 77064 United States"
 DEFAULT_HOURS = "Monday – Friday, 8:00 AM – 6:00 PM (CST)"
 DEFAULT_FORM_SUBTITLE = "Fill out the form and a representative will get back to you shortly."
 DEFAULT_SUCCESS = "Thanks! Your message has been sent. Our team will get back to you shortly."

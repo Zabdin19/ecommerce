@@ -1,0 +1,99 @@
+{% extends "templates/base.html" %}
+
+{#-
+	Request a Quote page. Submissions are saved as Ecommerce Quote Request
+	records (www/request_quote.py) and are viewable in Desk.
+-#}
+
+{% block head_include %}
+{{ super() }}
+<link rel="stylesheet" href="/assets/ecommerce/css/landing.css">
+{% endblock %}
+
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="fe-page">
+
+	{% include "templates/includes/announce.html" %}
+	{% include "templates/includes/header.html" %}
+
+	<!-- Hero -->
+	<section class="fe-about__hero">
+		<div class="fe-container">
+			<h1>{{ page_title }}</h1>
+			{% if page_subtitle %}<p>{{ page_subtitle }}</p>{% endif %}
+		</div>
+	</section>
+
+	<section class="fe-section">
+		<div class="fe-container">
+			<div class="fe-contact__formwrap">
+				<h2 class="fe-contact__title">Prime Bulk Buyers</h2>
+				<p class="fe-contact__lead">Fill out the form and our wholesale team will prepare a tailored quote for you.</p>
+				<form class="fe-contact__form" id="fe-quote-form">
+					<div class="fe-form">
+						<label class="fe-field"><span>Full Name</span><input type="text" name="full_name" placeholder="Enter Full Name" required></label>
+						<label class="fe-field"><span>Company Name</span><input type="text" name="company_name" placeholder="Enter Company Name"></label>
+						<label class="fe-field"><span>Email Address</span><input type="email" name="email" placeholder="Enter Email" required></label>
+						<label class="fe-field"><span>Phone Number</span><input type="text" name="phone" placeholder="Enter Phone Number"></label>
+						<label class="fe-field"><span>Square Footage</span><input type="text" name="square_footage" placeholder="Enter Square Footage"></label>
+						<label class="fe-field"><span>Type of Business</span>
+							<select name="type_of_business">
+								<option value="">Select</option>
+								{% for t in business_types %}<option value="{{ t }}">{{ t }}</option>{% endfor %}
+							</select>
+						</label>
+						<label class="fe-field fe-field--full"><span>Message</span><textarea name="message" rows="4" placeholder="Enter Your Message" required></textarea></label>
+					</div>
+					<button type="submit" class="fe-btn fe-btn--gold fe-btn--block">Submit</button>
+				</form>
+			</div>
+		</div>
+	</section>
+
+	{% include "templates/includes/footer.html" %}
+</div>
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+<script>
+(function () {
+	var form = document.getElementById("fe-quote-form");
+	if (!form) return;
+	function v(name) { var el = form.querySelector('[name="' + name + '"]'); return el ? el.value.trim() : ""; }
+	function alert(msg, ind) { if (window.frappe && frappe.show_alert) frappe.show_alert({ message: msg, indicator: ind || "red" }); }
+	form.addEventListener("submit", function (e) {
+		e.preventDefault();
+		var btn = form.querySelector("button[type=submit]");
+		var original = btn.textContent;
+		btn.disabled = true;
+		btn.textContent = "Submitting…";
+		frappe.call({
+			method: "ecommerce.www.request_quote.submit",
+			args: {
+				full_name: v("full_name"), company_name: v("company_name"), email: v("email"),
+				phone: v("phone"), square_footage: v("square_footage"), message: v("message"),
+				type_of_business: v("type_of_business"),
+			},
+			callback: function (r) {
+				var m = r.message || {};
+				if (m.ok) {
+					var done = document.createElement("p");
+					done.className = "fe-newsletter__done";
+					done.textContent = m.message || "Thanks!";
+					form.replaceWith(done);
+				} else {
+					btn.disabled = false;
+					btn.textContent = original;
+					alert(m.message || "Please check your details and try again.");
+				}
+			},
+			error: function () { btn.disabled = false; btn.textContent = original; alert("Something went wrong. Please try again."); },
+		});
+	});
+})();
+</script>
+{% endblock %}

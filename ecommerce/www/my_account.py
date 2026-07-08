@@ -29,6 +29,8 @@ def get_context(context):
 	context.nav = data["nav"]
 	context.stats = data["stats"]
 	context.recent_orders = data["recent_orders"]
+	context.all_orders = data["all_orders"]
+	context.addresses = data["addresses"]
 	context.current_year = frappe.utils.now_datetime().year
 	context.no_cache = 1
 	context.title = f"My Account | {context.chrome.brand}"
