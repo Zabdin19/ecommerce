@@ -20,12 +20,11 @@ DEFAULT_SUBTITLE = (
 	"Have a question about an order, a laptop's specs, or bulk pricing? Our "
 	"team is here to help — reach out and we'll respond within one business day."
 )
-# Left blank on purpose — fill in the real contact details via Contact Page
-# Settings in the Desk. The template hides each row until it has a value, so
-# an unset field never shows a placeholder to a customer.
-DEFAULT_EMAIL = ""
-DEFAULT_PHONE = ""
-DEFAULT_ADDRESS = ""
+DEFAULT_EMAIL = "Info@lapmarkaz.pk"
+DEFAULT_PHONE = "+92 321 2789920"
+DEFAULT_ADDRESS = "Karachi, Pakistan"
+# Business hours aren't set yet — leave blank; the template hides this row
+# until Contact Page Settings has a value, rather than show a guessed one.
 DEFAULT_HOURS = ""
 DEFAULT_FORM_SUBTITLE = "Fill out the form and a representative will get back to you shortly."
 DEFAULT_SUCCESS = "Thanks! Your message has been sent. Our team will get back to you shortly."

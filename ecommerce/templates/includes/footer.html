@@ -21,9 +21,9 @@
 		<div class="fe-footer__col">
 			<h5>Contact Us</h5>
 			<ul>
-				{% if chrome.footer_contact_address %}<li>{{ chrome.footer_contact_address }}</li>{% endif %}
-				{% if chrome.footer_contact_phone %}<li><a href="tel:{{ chrome.footer_contact_phone }}">{{ chrome.footer_contact_phone }}</a></li>{% endif %}
 				{% if chrome.footer_contact_email %}<li><a href="mailto:{{ chrome.footer_contact_email }}">{{ chrome.footer_contact_email }}</a></li>{% endif %}
+				{% if chrome.footer_contact_phone %}<li><a href="tel:{{ chrome.footer_contact_phone }}">{{ chrome.footer_contact_phone }}</a></li>{% endif %}
+				{% if chrome.footer_contact_address %}<li>{{ chrome.footer_contact_address }}</li>{% endif %}
 			</ul>
 		</div>
 	</div>
