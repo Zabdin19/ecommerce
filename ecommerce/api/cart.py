@@ -124,12 +124,32 @@ def _so_get(customer, create=False):
 	return so
 
 
+def _pin_storefront_currency(order):
+	"""The storefront sells only in the company currency, so pin every Sales
+	Order to it at a 1:1 conversion rate.
+
+	Without this, if an order's currency drifts from the company currency
+	(e.g. a customer/price-list default of USD while the company is PKR),
+	ERPNext tries to auto-fetch an exchange rate and — when the server can't
+	reach the rate API and no Currency Exchange record exists — throws
+	"Exchange Rate is mandatory. Maybe Currency Exchange record is not created
+	for USD to PKR." Forcing a 1:1 rate removes the lookup entirely. Item
+	prices are stored in the company currency, so amounts stay correct."""
+	company_currency = frappe.get_cached_value("Company", order.company, "default_currency")
+	if company_currency:
+		order.currency = company_currency
+		order.price_list_currency = company_currency
+	order.conversion_rate = 1.0
+	order.plc_conversion_rate = 1.0
+
+
 def _save_order(order):
 	if not order.items and not order.is_new():
 		name = order.name
 		frappe.delete_doc("Sales Order", name, ignore_permissions=True, force=True)
 		frappe.db.commit()
 		return None
+	_pin_storefront_currency(order)
 	order.flags.ignore_permissions = True
 	if order.is_new():
 		order.insert(ignore_permissions=True)
@@ -454,6 +474,7 @@ def submit_cart_order(address=None, shipping_method=None, payment_method=None):
 		if warehouse:
 			row.warehouse = warehouse
 
+	_pin_storefront_currency(order)
 	order.flags.ignore_permissions = True
 	order.save(ignore_permissions=True)
 	order.submit()
