@@ -12,7 +12,7 @@
 		<nav class="fe-crumbs"><a href="/">Home</a><span class="fe-crumbs__sep">›</span><span class="fe-crumbs__cur">Shopping Cart</span></nav>
 
 		<div class="fe-cart__layout">
-			<section class="fe-cart__main" data-shipping="{{ shipping_value }}" data-tax="{{ tax_rate }}">
+			<section class="fe-cart__main" data-shipping="{{ shipping_value }}" data-currency="{{ currency_symbol }}">
 				<div class="fe-cart__head">
 					<h2>Your Cart (<span class="fe-cart__count">{{ item_count }} items</span>)</h2>
 					<button class="fe-cart__clear">
@@ -69,7 +69,6 @@
 					<h3>Order Summary</h3>
 					<div class="fe-summary__row"><span>Subtotal</span><span class="fe-cart__subtotal">{{ summary.subtotal }}</span></div>
 					<div class="fe-summary__row"><span>Shipping Estimate</span><span>{{ summary.shipping }}</span></div>
-					<div class="fe-summary__row"><span>{{ summary.tax_label }}</span><span class="fe-cart__tax">{{ summary.tax }}</span></div>
 					<div class="fe-summary__total"><div><strong>Total</strong><small>Net Payable Amount</small></div><span class="fe-cart__grandtotal">{{ summary.total }}</span></div>
 
 					<span class="fe-summary__label">Coupon Code</span>
@@ -107,9 +106,9 @@
 	var main = document.querySelector(".fe-cart__main");
 	if (!main) return;
 	var shipping = parseFloat(main.getAttribute("data-shipping")) || 0;
-	var taxRate = parseFloat(main.getAttribute("data-tax")) || 0;
+	var currencySymbol = main.getAttribute("data-currency") || "";
 
-	function fmt(v) { return "$" + v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+	function fmt(v) { return currencySymbol + " " + v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 	function setText(sel, txt) { var el = document.querySelector(sel); if (el) el.textContent = txt; }
 
 	function recalc() {
@@ -125,10 +124,8 @@
 			var cell = row.querySelector(".fe-cart__total");
 			if (cell) cell.textContent = fmt(line);
 		});
-		var tax = subtotal * taxRate / 100;
 		setText(".fe-cart__subtotal", fmt(subtotal));
-		setText(".fe-cart__tax", fmt(tax));
-		setText(".fe-cart__grandtotal", fmt(subtotal + shipping + tax));
+		setText(".fe-cart__grandtotal", fmt(subtotal + shipping));
 		setText(".fe-cart__count", count + (count === 1 ? " item" : " items"));
 	}
 

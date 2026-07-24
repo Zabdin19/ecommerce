@@ -98,7 +98,7 @@ def get_context(context):
 		return (ap.get(fieldname) if ap else None) or None
 
 	about = frappe._dict(
-		page_title=val("page_title", "About Dollar Basket"),
+		page_title=val("page_title", "About Lapmarkaz"),
 		page_subtitle=val("page_subtitle", DEFAULT_SUBTITLE),
 		hero_image=(ap.get("hero_image") if ap else None),
 		story_heading=val("story_heading", "Our Story"),

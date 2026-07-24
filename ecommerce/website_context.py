@@ -47,7 +47,7 @@ DEFAULT_LOGO_ON_DARK = "/assets/ecommerce/images/logo-light.svg"
 DEFAULT_LOGO_ON_LIGHT = "/assets/ecommerce/images/logo.svg"
 
 DEFAULT_FOOTER_DESCRIPTION = (
-	"Dollar Basket is the leading wholesale distributor of industrial "
+	"Lapmarkaz is the leading wholesale distributor of industrial "
 	"equipment, electrical supplies, and technical components. Serving global "
 	"enterprises since 1984."
 )
@@ -76,7 +76,7 @@ def get_chrome():
 	def hpval(fieldname, default=""):
 		return ((hp.get(fieldname) if hp else None) or "").strip() or default
 
-	brand = val("brand") or "Dollar Basket"
+	brand = val("brand") or "Lapmarkaz"
 	uploaded_logo = (hp.get("header_logo") if hp else None) or settings.get("banner_image") or settings.get("app_logo")
 
 	# Storefront login state is intentionally separate from Frappe/Desk sid.
@@ -122,7 +122,7 @@ def get_chrome():
 		footer_contact_phone=val("custom_footer_contact_phone", "+1 281-822-1544"),
 		footer_contact_email=val("custom_footer_contact_email", "info@dollorbasket.com"),
 		footer_columns=footer_columns(settings.get("custom_footer_links")),
-		copyright=val("copyright", "Dollar Basket. All Rights Reserved."),
+		copyright=val("copyright", "Lapmarkaz. All Rights Reserved."),
 		cart_count=cart_qty,
 		theme=theme,
 		logged_in=logged_in,

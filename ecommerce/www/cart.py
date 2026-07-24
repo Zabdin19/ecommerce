@@ -6,6 +6,7 @@
 import frappe
 
 from ecommerce.api import cart as cart_api
+from ecommerce.api.common import currency
 from ecommerce.website_context import get_chrome
 
 no_cache = 1
@@ -15,10 +16,10 @@ def get_context(context):
 	data = cart_api.get_cart_data()
 
 	context.chrome = get_chrome()
+	context.currency_symbol = frappe.db.get_value("Currency", currency(), "symbol") or currency()
 	context.cart_items = data["items"]
 	context.item_count = data["item_count"]
 	context.shipping_value = data["shipping_value"]
-	context.tax_rate = data["tax_rate"]
 	context.summary = data["summary"]
 	context.current_year = frappe.utils.now_datetime().year
 	context.no_cache = 1

@@ -31,8 +31,8 @@
 
 				<div class="fe-filters__block">
 					<span class="fe-filters__label">Price Range</span>
-					<input type="range" min="0" max="100" value="35" class="fe-range">
-					<div class="fe-filters__rangelabels"><span>$0</span><span>$5,000+</span></div>
+					<input type="range" min="0" max="{{ price_max_cap }}" step="5000" value="{{ price_max_value }}" class="fe-range" id="fe-price-range">
+					<div class="fe-filters__rangelabels"><span>{{ currency_symbol }} 0</span><span id="fe-price-range-label">{{ currency_symbol }} {{ price_max_cap_label }}+</span></div>
 				</div>
 
 				{% if manufacturers %}
@@ -113,4 +113,31 @@
 
 	{% include "templates/includes/footer.html" %}
 </div>
+{% endblock %}
+
+{% block script %}{{ super() }}
+<script>
+(function () {
+	var slider = document.getElementById("fe-price-range");
+	var label = document.getElementById("fe-price-range-label");
+	if (!slider) return;
+	var cap = parseFloat(slider.max);
+	var currency = {{ currency_symbol | tojson }};
+	var filterQuery = {{ filter_query_no_price | tojson }};
+
+	function labelFor(value) {
+		return value >= cap ? (currency + " " + cap.toLocaleString("en-US") + "+") : (currency + " " + value.toLocaleString("en-US"));
+	}
+
+	slider.addEventListener("input", function () {
+		label.textContent = labelFor(parseFloat(slider.value));
+	});
+
+	slider.addEventListener("change", function () {
+		var value = parseFloat(slider.value);
+		var href = value >= cap ? filterQuery : (filterQuery + "price_max=" + encodeURIComponent(value));
+		window.location.href = window.location.pathname + href;
+	});
+})();
+</script>
 {% endblock %}

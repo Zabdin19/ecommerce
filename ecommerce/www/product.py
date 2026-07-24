@@ -12,14 +12,17 @@ import frappe
 
 from ecommerce.api import products
 from ecommerce.api import wishlist
+from ecommerce.api.common import money
 from ecommerce.website_context import get_chrome
 
 no_cache = 1
 
+FREE_DELIVERY_THRESHOLD = 15000
+
 DELIVERY_CARDS = [
 	{
 		"title": "Free Bulk Delivery",
-		"text": "On orders over $15,000 to logistics hubs.",
+		"text": "On orders over {threshold} to logistics hubs.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="17" r="1.6"/><circle cx="17.5" cy="17" r="1.6"/></svg>',
 	},
 	{
@@ -47,7 +50,8 @@ def get_context(context):
 	context.specs = detail["specs"]
 	context.reviews = []  # no review data on this site yet
 	context.related = detail["related"]
-	context.delivery_cards = DELIVERY_CARDS
+	threshold = money(FREE_DELIVERY_THRESHOLD)
+	context.delivery_cards = [dict(c, text=c["text"].format(threshold=threshold)) for c in DELIVERY_CARDS]
 	context.breadcrumbs = detail["breadcrumbs"]
 	context.current_year = frappe.utils.now_datetime().year
 	context.no_cache = 1

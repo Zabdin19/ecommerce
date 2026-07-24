@@ -18,6 +18,10 @@ from ecommerce.api.common import get_price, get_stock, money, price_list
 
 PAGE_SIZE = 12
 
+# Upper bound of the storefront's price-range slider. The slider's rightmost
+# position means "no cap" (shown as "{cap}+"), not literally this value.
+PRICE_FILTER_CAP = 1000000
+
 
 def _price_map():
 	"""Return ``{item_code: price_list_rate}`` for the storefront price list in one query."""
@@ -53,7 +57,7 @@ def _card(it):
 	}
 
 
-def list_products(q=None, item_group=None, brand=None, sort=None, page=1, page_size=PAGE_SIZE):
+def list_products(q=None, item_group=None, brand=None, sort=None, page=1, page_size=PAGE_SIZE, price_max=None):
 	page = max(1, cint(page))
 	filters = {"disabled": 0, "is_sales_item": 1}
 	if item_group:
@@ -64,16 +68,29 @@ def list_products(q=None, item_group=None, brand=None, sort=None, page=1, page_s
 	if q:
 		or_filters = [["item_name", "like", f"%{q}%"], ["item_code", "like", f"%{q}%"]]
 
-	fields = ["name", "item_name", "item_group", "brand", "image"]
+	fields = ["name", "item_name", "item_group", "brand", "image", "creation"]
 	start = (page - 1) * page_size
 
-	# Price sorts need the rate from Item Price, which isn't a column on Item,
-	# so sort in Python over the full result set, then paginate.
-	if sort in ("price_asc", "price_desc"):
+	# Price sorts/filters need the rate from Item Price, which isn't a column on
+	# Item, so sort and filter in Python over the full result set, then paginate.
+	if price_max is not None or sort in ("price_asc", "price_desc"):
 		rows = frappe.get_all("Item", filters=filters, or_filters=or_filters, fields=fields, limit_page_length=0)
-		total = len(rows)
 		prices = _price_map()
-		rows.sort(key=lambda it: prices.get(it.name, 0.0), reverse=(sort == "price_desc"))
+		if price_max is not None:
+			rows = [r for r in rows if prices.get(r.name, 0.0) <= price_max]
+
+		order_map = {
+			"asc": lambda it: it.name,
+			"desc": lambda it: it.name,
+			"name_asc": lambda it: it.item_name,
+			"name_desc": lambda it: it.item_name,
+			"price_asc": lambda it: prices.get(it.name, 0.0),
+			"price_desc": lambda it: prices.get(it.name, 0.0),
+		}
+		reverse = sort in ("desc", "name_desc", "price_desc")
+		rows.sort(key=order_map.get(sort, lambda it: it.creation), reverse=reverse)
+
+		total = len(rows)
 		page_rows = rows[start : start + page_size]
 		return [_card(it) for it in page_rows], total
 

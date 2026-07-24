@@ -7,12 +7,14 @@ import frappe
 from frappe import _
 
 from ecommerce.api.cart import _so_get, get_cart_data, submit_cart_order
+from ecommerce.api.common import money
 
 # Shipping options are app-defined (the site has no shipping-rule data).
+# `price_value` is formatted to the storefront currency in get_checkout_context().
 SHIPPING_METHODS = [
-	{"id": "standard", "title": "Standard (3-5 days)", "desc": "Default carrier selection for small items.", "price": "$45.00", "checked": True},
-	{"id": "express", "title": "Express (1-2 days)", "desc": "Prioritized air freight for urgent supplies.", "price": "$120.00", "checked": False},
-	{"id": "freight", "title": "Wholesale Logistics (Freight)", "desc": "LTL shipping for palletized heavy machinery.", "price": "$450.00", "checked": False},
+	{"id": "standard", "title": "Standard (3-5 days)", "desc": "Default carrier selection for small items.", "price_value": 45.00, "checked": True},
+	{"id": "express", "title": "Express (1-2 days)", "desc": "Prioritized air freight for urgent supplies.", "price_value": 120.00, "checked": False},
+	{"id": "freight", "title": "Wholesale Logistics (Freight)", "desc": "LTL shipping for palletized heavy machinery.", "price_value": 450.00, "checked": False},
 ]
 
 PAYMENT_METHODS = [
@@ -25,10 +27,11 @@ PAYMENT_METHODS = [
 def get_checkout_context():
 	cart = get_cart_data()
 	summary_items = [{"name": i["name"], "qty": i["qty"], "price": i["total"]} for i in cart["items"]]
+	shipping_methods = [dict(m, price=money(m["price_value"])) for m in SHIPPING_METHODS]
 	return {
 		"summary_items": summary_items,
 		"summary": cart["summary"],
-		"shipping_methods": SHIPPING_METHODS,
+		"shipping_methods": shipping_methods,
 		"payment_methods": PAYMENT_METHODS,
 	}
 

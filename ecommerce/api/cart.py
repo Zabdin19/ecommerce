@@ -35,65 +35,21 @@ def _delivery_date():
 	return getdate(add_days(nowdate(), 7))
 
 
-# --- tax (from the ERPNext Sales Taxes and Charges Template) ----------------
-
-def _default_tax_template(company):
-	"""The Sales Taxes and Charges Template ERPNext applies to a Sales Order for
-	this company (its default), mirroring the backend behaviour."""
-	if not company:
-		return None
-	return (
-		frappe.db.get_value("Sales Taxes and Charges Template", {"company": company, "is_default": 1, "disabled": 0}, "name")
-		or frappe.db.get_value("Sales Taxes and Charges Template", {"company": company, "is_default": 1}, "name")
-		or frappe.db.get_value("Sales Taxes and Charges Template", {"company": company, "disabled": 0}, "name")
-	)
-
-
-def _tax_label(rate):
-	return f"Tax ({rate:g}%)" if rate else "Tax"
-
-
-def _template_rate_label(company):
-	"""(rate, label) from the company's default tax template — used for the guest
-	estimate, where there is no Sales Order yet to calculate against."""
-	template = _default_tax_template(company)
-	if not template:
-		return 0.0, "Tax"
-	rate = sum(flt(r.rate) for r in frappe.get_all(
-		"Sales Taxes and Charges", filters={"parent": template}, fields=["rate"]))
-	return rate, _tax_label(rate)
-
-
-def _apply_taxes(so):
-	"""Attach the company's default Sales Taxes and Charges Template so ERPNext
-	calculates tax on save exactly like a backend-created Sales Order."""
-	if so.get("taxes_and_charges") and so.get("taxes"):
-		return
-	template = _default_tax_template(so.company)
-	if not template:
-		return
-	from erpnext.controllers.accounts_controller import get_taxes_and_charges
-
-	so.taxes_and_charges = template
-	so.set("taxes", get_taxes_and_charges("Sales Taxes and Charges Template", template))
-
-
 # --- shared payload ---------------------------------------------------------
+# The storefront doesn't charge tax; Sales Orders are created without a
+# Taxes and Charges template so ERPNext never adds one on save either.
 
-def _finalize(items, subtotal, count, sales_order, tax_amount, tax_rate, tax_label):
+def _finalize(items, subtotal, count, sales_order):
 	shipping = SHIPPING_VALUE if subtotal else 0.0
-	total = subtotal + shipping + flt(tax_amount)
+	total = subtotal + shipping
 	return {
 		"items": items,
 		"item_count": count,
 		"sales_order": sales_order,
 		"shipping_value": shipping,
-		"tax_rate": tax_rate,
 		"summary": {
 			"subtotal": money(subtotal),
 			"shipping": money(shipping),
-			"tax_label": tax_label,
-			"tax": money(tax_amount),
 			"total": money(total),
 		},
 	}
@@ -174,7 +130,6 @@ def _save_order(order):
 		frappe.delete_doc("Sales Order", name, ignore_permissions=True, force=True)
 		frappe.db.commit()
 		return None
-	_apply_taxes(order)
 	order.flags.ignore_permissions = True
 	if order.is_new():
 		order.insert(ignore_permissions=True)
@@ -192,18 +147,7 @@ def _serialize(order):
 			subtotal += amount
 			count += cint(row.qty)
 			items.append(_item_row(row.item_code, row.item_name, row.qty, row.rate, amount))
-
-	if not order:
-		tax_amount, rate, label = 0.0, 0.0, "Tax"
-	elif order.get("taxes"):
-		# Authoritative: amount ERPNext computed on the Sales Order itself.
-		tax_amount = flt(order.total_taxes_and_charges)
-		rate = sum(flt(t.rate) for t in order.taxes)
-		label = _tax_label(rate)
-	else:
-		rate, label = _template_rate_label(order.company)
-		tax_amount = subtotal * rate / 100
-	return _finalize(items, subtotal, count, order.name if order else None, tax_amount, rate, label)
+	return _finalize(items, subtotal, count, order.name if order else None)
 
 
 def _so_add(customer, item_code, qty):
@@ -307,11 +251,7 @@ def _serialize_guest(cart):
 			subtotal += amount
 			count += cint(row.qty)
 			items.append(_item_row(row.item_code, row.item_name, row.qty, row.rate, amount))
-	# No Sales Order yet for a guest — estimate using the same tax template the
-	# Sales Order will apply after login (rate × net total).
-	rate, label = _template_rate_label(_company())
-	tax_amount = subtotal * rate / 100
-	return _finalize(items, subtotal, count, None, tax_amount, rate, label)
+	return _finalize(items, subtotal, count, None)
 
 
 def _guest_add(item_code, qty):
@@ -514,7 +454,6 @@ def submit_cart_order(address=None, shipping_method=None, payment_method=None):
 		if warehouse:
 			row.warehouse = warehouse
 
-	_apply_taxes(order)
 	order.flags.ignore_permissions = True
 	order.save(ignore_permissions=True)
 	order.submit()

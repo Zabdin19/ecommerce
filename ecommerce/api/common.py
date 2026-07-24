@@ -4,7 +4,7 @@
 """Shared helpers for the Ecommerce API layer: pricing, stock, money formatting."""
 
 import frappe
-from frappe.utils import flt
+from frappe.utils import flt, fmt_money
 
 # Selling price list used for storefront prices. Falls back to the first enabled
 # selling price list if this one does not exist on the site.
@@ -18,12 +18,12 @@ def price_list():
 
 
 def currency():
-	return frappe.db.get_value("Price List", price_list(), "currency") or "USD"
+	return frappe.db.get_value("Price List", price_list(), "currency") or "PKR"
 
 
 def money(value):
-	"""Format a number as the storefront currency string, e.g. ``$1,249.00``."""
-	return "${:,.2f}".format(flt(value))
+	"""Format a number as the storefront currency string, e.g. ``Rs 1,249.00``."""
+	return fmt_money(flt(value), currency=currency())
 
 
 def get_price(item_code):
