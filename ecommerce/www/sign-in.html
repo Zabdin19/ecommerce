@@ -7,16 +7,16 @@
 <div class="fe-page fe-auth">
 	<div class="fe-auth__wrap">
 		<a href="/" class="fe-auth__logo">{% if logo %}<img src="{{ logo }}" alt="{{ brand }}">{% else %}🛒{% endif %}</a>
-		<h1 class="fe-auth__title">Corporate Portal</h1>
-		<p class="fe-auth__sub">B2B Wholesale &amp; Distribution Management</p>
+		<h1 class="fe-auth__title">My Account</h1>
+		<p class="fe-auth__sub">Sign in to track orders &amp; manage your account</p>
 
 		<form class="fe-auth__card" id="fe-login" data-redirect="{{ redirect_to }}">
 			<h2>Welcome back</h2>
-			<p class="fe-auth__hint">Please enter your professional credentials to continue.</p>
+			<p class="fe-auth__hint">Please enter your details to continue.</p>
 			{% if checkout_notice %}<p class="fe-auth__notice">Please login to continue checkout.</p>{% endif %}
 
-			<label class="fe-field fe-field--full"><span>Business Email</span>
-				<div class="fe-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><input type="email" name="usr" placeholder="name@company.com" required></div>
+			<label class="fe-field fe-field--full"><span>Email</span>
+				<div class="fe-input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><input type="email" name="usr" placeholder="name@example.com" required></div>
 			</label>
 			<label class="fe-field fe-field--full">
 				<span class="fe-field__row">Password <a href="/update-password" class="fe-link">Forgot Password?</a></span>
@@ -27,7 +27,7 @@
 			<button type="submit" class="fe-btn fe-btn--navy fe-btn--block">Login →</button>
 		</form>
 
-		<p class="fe-auth__alt">Don't have a corporate account? <a href="/register" class="fe-link fe-link--gold">Request Access ↗</a></p>
+		<p class="fe-auth__alt">Don't have an account? <a href="/register" class="fe-link fe-link--gold">Sign Up ↗</a></p>
 	</div>
 
 	<footer class="fe-auth__footer--bar">

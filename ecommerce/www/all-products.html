@@ -14,7 +14,7 @@
 	{% include "templates/includes/header.html" %}
 
 	<main class="fe-container fe-plp">
-		<nav class="fe-crumbs"><a href="/">Home</a><span class="fe-crumbs__sep">›</span><a href="/all-products">Shop</a><span class="fe-crumbs__sep">›</span><span class="fe-crumbs__cur">Industrial Catalog</span></nav>
+		<nav class="fe-crumbs"><a href="/">Home</a><span class="fe-crumbs__sep">›</span><a href="/all-products">Shop</a><span class="fe-crumbs__sep">›</span><span class="fe-crumbs__cur">Laptops</span></nav>
 
 		<div class="fe-plp__layout">
 			<aside class="fe-filters">
@@ -25,7 +25,7 @@
 				<ul class="fe-filters__cats">
 					<li><a href="/all-products"{% if not active_group %} class="is-active"{% endif %}>All Products</a></li>
 					{% for c in categories %}
-					<li><a href="/all-products?item_group={{ c | urlencode }}"{% if c == active_group %} class="is-active"{% endif %}>{{ c }}{% if c == active_group %}<span>›</span>{% endif %}</a></li>
+					<li><a href="/all-products?item_group={{ c | urlencode }}"{% if c == active_group %} class="is-active"{% endif %}>{{ "All Laptops" if c == "Laptops" else c }}{% if c == active_group %}<span>›</span>{% endif %}</a></li>
 					{% endfor %}
 				</ul>
 
@@ -39,7 +39,7 @@
 				<div class="fe-filters__block">
 					<span class="fe-filters__label">Manufacturer</span>
 					{% for name, checked in manufacturers %}
-					<a class="fe-check" href="/all-products?brand={{ name | urlencode }}"><input type="checkbox"{% if checked %} checked{% endif %} onclick="return false"><span>{{ name }}</span></a>
+					<a class="fe-check" href="/all-products?brand={{ name | urlencode }}"><input type="checkbox"{% if checked %} checked{% endif %} style="pointer-events: none" tabindex="-1"><span>{{ name }}</span></a>
 					{% endfor %}
 				</div>
 				{% endif %}

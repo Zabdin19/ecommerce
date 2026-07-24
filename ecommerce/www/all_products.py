@@ -86,6 +86,6 @@ def get_context(context):
 	context.search_q = q or ""
 	context.current_year = frappe.utils.now_datetime().year
 	context.no_cache = 1
-	context.title = f"Industrial Catalog | {context.chrome.brand}"
+	context.title = f"Laptop Catalog | {context.chrome.brand}"
 	context.metatags = {"title": context.title, "description": "Browse the full product catalog."}
 	return context

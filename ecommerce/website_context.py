@@ -13,20 +13,20 @@ default that matches the reference design.
 import frappe
 
 DEFAULT_NAV = [
-	{"label": "All Categories", "url": "/all-products"},
-	{"label": "Bulk Orders", "url": "/cart"},
+	{"label": "New Laptops", "url": "/all-products?item_group=New Laptops"},
+	{"label": "Refurbished Laptops", "url": "/all-products?item_group=Refurbished Laptops"},
 	{"label": "About Us", "url": "/about"},
 	{"label": "Contact Us", "url": "/contact"},
 ]
 
 DEFAULT_FOOTER_COLUMNS = [
 	{
-		"heading": "Solutions",
+		"heading": "Shop",
 		"links": [
-			{"label": "Bulk Distribution", "url": "/all-products"},
-			{"label": "API Documentation", "url": "#"},
-			{"label": "Logistics Services", "url": "#"},
-			{"label": "Request Quote", "url": "/request-quote"},
+			{"label": "New Laptops", "url": "/all-products?item_group=New Laptops"},
+			{"label": "Refurbished Laptops", "url": "/all-products?item_group=Refurbished Laptops"},
+			{"label": "Laptop Accessories", "url": "/all-products?item_group=Accessories"},
+			{"label": "Request a Quote", "url": "/request-quote"},
 		],
 	},
 	{
@@ -47,9 +47,9 @@ DEFAULT_LOGO_ON_DARK = "/assets/ecommerce/images/logo-light.svg"
 DEFAULT_LOGO_ON_LIGHT = "/assets/ecommerce/images/logo.svg"
 
 DEFAULT_FOOTER_DESCRIPTION = (
-	"Lapmarkaz is the leading wholesale distributor of industrial "
-	"equipment, electrical supplies, and technical components. Serving global "
-	"enterprises since 1984."
+	"Lapmarkaz is Pakistan's trusted online store for new and refurbished "
+	"laptops from Dell, HP, Lenovo, Apple, Asus & more — genuine products, "
+	"official warranty, and nationwide delivery."
 )
 
 
@@ -113,12 +113,12 @@ def get_chrome():
 		# `logo` is shown on the dark header/footer; `logo_on_light` on light pages.
 		logo=uploaded_logo or DEFAULT_LOGO_ON_DARK,
 		logo_on_light=uploaded_logo or DEFAULT_LOGO_ON_LIGHT,
-		search_placeholder=hpval("search_placeholder", "Search by SKU, Model, or Component…"),
-		announcement_text_1=hpval("topbar_free_freight_text", val("custom_announcement_text_1", "Free freight on orders over $1,500")),
-		announcement_text_2=hpval("topbar_distributor_text", val("custom_announcement_text_2", "Official B2B Distributor")),
+		search_placeholder=hpval("search_placeholder", "Search by brand, model, or specs..."),
+		announcement_text_1=hpval("topbar_free_freight_text", val("custom_announcement_text_1", "Free Delivery All Over Pakistan")),
+		announcement_text_2=hpval("topbar_distributor_text", val("custom_announcement_text_2", "100% Genuine Products with Official Warranty")),
 		nav_items=_mark_active(nav_items(menu_rows)),
 		footer_description=val("custom_footer_description", DEFAULT_FOOTER_DESCRIPTION),
-		footer_contact_address=val("custom_footer_contact_address", "11015 North Sam Houston Pkwy W, Houston, TX 77064 United States"),
+		footer_contact_address=val("custom_footer_contact_address", ""),
 		footer_contact_phone=val("custom_footer_contact_phone", "+1 281-822-1544"),
 		footer_contact_email=val("custom_footer_contact_email", "info@dollorbasket.com"),
 		footer_columns=footer_columns(settings.get("custom_footer_links")),

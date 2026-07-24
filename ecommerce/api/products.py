@@ -60,7 +60,10 @@ def _card(it):
 def list_products(q=None, item_group=None, brand=None, sort=None, page=1, page_size=PAGE_SIZE, price_max=None):
 	page = max(1, cint(page))
 	filters = {"disabled": 0, "is_sales_item": 1}
-	if item_group:
+	if item_group == "Laptops":
+		# "Laptops" is the umbrella group (parent of New/Refurbished) — match either child.
+		filters["item_group"] = ["in", ["New Laptops", "Refurbished Laptops"]]
+	elif item_group:
 		filters["item_group"] = item_group
 	if brand:
 		filters["brand"] = brand
@@ -130,8 +133,16 @@ def page_numbers(total, page, page_size=PAGE_SIZE):
 
 
 def get_categories():
-	groups = frappe.get_all("Item Group", filters={"is_group": 0}, fields=["name"], order_by="name asc")
-	return [g.name for g in groups if g.name != "All Item Groups"]
+	"""Catalog sidebar order: the laptop umbrella + its two conditions first,
+	then any other leaf group (e.g. Accessories), alphabetically."""
+	leading = [g for g in ("Laptops", "New Laptops", "Refurbished Laptops") if frappe.db.exists("Item Group", g)]
+	rest = frappe.get_all(
+		"Item Group",
+		filters={"is_group": 0, "name": ["not in", ["New Laptops", "Refurbished Laptops"]]},
+		fields=["name"],
+		order_by="name asc",
+	)
+	return leading + [g.name for g in rest if g.name != "All Item Groups"]
 
 
 def get_manufacturers(selected=None):

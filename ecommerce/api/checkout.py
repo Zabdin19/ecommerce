@@ -12,15 +12,15 @@ from ecommerce.api.common import money
 # Shipping options are app-defined (the site has no shipping-rule data).
 # `price_value` is formatted to the storefront currency in get_checkout_context().
 SHIPPING_METHODS = [
-	{"id": "standard", "title": "Standard (3-5 days)", "desc": "Default carrier selection for small items.", "price_value": 45.00, "checked": True},
-	{"id": "express", "title": "Express (1-2 days)", "desc": "Prioritized air freight for urgent supplies.", "price_value": 120.00, "checked": False},
-	{"id": "freight", "title": "Wholesale Logistics (Freight)", "desc": "LTL shipping for palletized heavy machinery.", "price_value": 450.00, "checked": False},
+	{"id": "standard", "title": "Standard Delivery (3-5 days)", "desc": "Nationwide courier delivery — Cash on Delivery available.", "price_value": 45.00, "checked": True},
+	{"id": "express", "title": "Express Delivery (1-2 days)", "desc": "Faster delivery for Karachi, Lahore & Islamabad.", "price_value": 120.00, "checked": False},
+	{"id": "freight", "title": "Same-Day Delivery", "desc": "Order before 2 PM for same-day delivery in Karachi, Lahore & Islamabad.", "price_value": 450.00, "checked": False},
 ]
 
 PAYMENT_METHODS = [
-	{"id": "card", "title": "Corporate Credit Card", "icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>', "checked": True},
-	{"id": "wire", "title": "Bank Wire Transfer", "icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18M5 21V10m14 11V10M3 10l9-6 9 6M9 21v-6h6v6"/></svg>', "checked": False},
-	{"id": "cod", "title": "Cash on Delivery", "icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>', "checked": False},
+	{"id": "cod", "title": "Cash on Delivery", "icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>', "checked": True},
+	{"id": "card", "title": "Debit / Credit Card", "icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>', "checked": False},
+	{"id": "wire", "title": "Bank Transfer", "icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18M5 21V10m14 11V10M3 10l9-6 9 6M9 21v-6h6v6"/></svg>', "checked": False},
 ]
 
 

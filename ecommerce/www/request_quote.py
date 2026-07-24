@@ -3,9 +3,10 @@
 
 """Controller for the Request a Quote page (`/request-quote`).
 
-Renders a B2B quote-request form. Submissions are stored as
-**Ecommerce Quote Request** records, viewable in Desk. The shared chrome is
-built by ``ecommerce.website_context.get_chrome``.
+Renders a bulk-order quote-request form for schools, offices, and businesses
+buying laptops in quantity. Submissions are stored as **Ecommerce Quote
+Request** records, viewable in Desk. The shared chrome is built by
+``ecommerce.website_context.get_chrome``.
 """
 
 import frappe
@@ -17,10 +18,10 @@ no_cache = 1
 
 PAGE_TITLE = "Request a Quote"
 PAGE_SUBTITLE = (
-	"Tell us about your requirements and our team will prepare a tailored "
-	"wholesale quote for your business."
+	"Buying laptops in bulk for your office, school, or business? Tell us what "
+	"you need and our team will prepare a tailored quote."
 )
-BUSINESS_TYPES = ["Retailer", "Wholesaler", "Distributor", "Manufacturer", "Other"]
+BUSINESS_TYPES = ["School / Institution", "Corporate / Office", "Retailer", "Other"]
 SUCCESS_MESSAGE = "Thanks! Your quote request has been received. Our team will get back to you shortly."
 
 
@@ -35,7 +36,7 @@ def get_context(context):
 	context.title = f"{PAGE_TITLE} | {chrome.brand}"
 	context.metatags = {
 		"title": context.title,
-		"description": "Request a wholesale quote for bulk orders.",
+		"description": "Request a quote for bulk laptop orders.",
 		"og:type": "website",
 	}
 	return context

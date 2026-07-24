@@ -21,13 +21,13 @@ FREE_DELIVERY_THRESHOLD = 15000
 
 DELIVERY_CARDS = [
 	{
-		"title": "Free Bulk Delivery",
-		"text": "On orders over {threshold} to logistics hubs.",
+		"title": "Free Nationwide Delivery",
+		"text": "On orders over {threshold}, with Cash on Delivery available.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="17" r="1.6"/><circle cx="17.5" cy="17" r="1.6"/></svg>',
 	},
 	{
-		"title": "3 Year Manufacturer Warranty",
-		"text": "Includes on-site maintenance support.",
+		"title": "Official Warranty",
+		"text": "New laptops include manufacturer warranty; refurbished laptops include our own warranty.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>',
 	},
 ]

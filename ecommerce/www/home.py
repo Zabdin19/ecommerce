@@ -24,18 +24,18 @@ no_cache = 1
 
 DEFAULT_CATEGORY_CARDS = [
 	{
-		"title": "Power Tools",
-		"subtitle": "Drills, Saws, Sanders & Precision Machinery",
-		"link": "/all-products",
+		"title": "New Laptops",
+		"subtitle": "Dell, HP, Lenovo, Asus, Acer, Apple & MSI — brand new, sealed box",
+		"link": "/all-products?item_group=New Laptops",
 		"is_large": 1,
 		"image": None,
 	},
-	{"title": "Safety Equipment", "subtitle": "", "link": "/all-products", "is_large": 0, "image": None},
-	{"title": "Electrical", "subtitle": "", "link": "/all-products", "is_large": 0, "image": None},
+	{"title": "Refurbished Laptops", "subtitle": "", "link": "/all-products?item_group=Refurbished Laptops", "is_large": 0, "image": None},
+	{"title": "All Laptops", "subtitle": "", "link": "/all-products?item_group=Laptops", "is_large": 0, "image": None},
 	{
-		"title": "Pneumatics & Hydraulics",
+		"title": "Laptop Accessories",
 		"subtitle": "",
-		"link": "/all-products",
+		"link": "/all-products?item_group=Accessories",
 		"is_large": 0,
 		"image": None,
 	},
@@ -43,34 +43,35 @@ DEFAULT_CATEGORY_CARDS = [
 
 DEFAULT_FEATURES = [
 	{
-		"title": "Reliable Shipping",
-		"description": "Next-day delivery for corporate partners within 50 miles of any hub center.",
+		"title": "Nationwide Delivery",
+		"description": "Fast, tracked delivery to every city in Pakistan, with Cash on Delivery available.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="17" r="1.6"/><circle cx="17.5" cy="17" r="1.6"/></svg>',
 	},
 	{
-		"title": "B2B Integration",
-		"description": "Seamlessly connect your ERP for automated procurement and bulk invoicing.",
+		"title": "100% Genuine & Tested",
+		"description": "Every new and refurbished laptop is inspected and tested before it ships.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/><path d="M11 7h4a2 2 0 0 1 2 2v4"/></svg>',
 	},
 	{
 		"title": "Expert Support",
-		"description": "Technical advisors available 24/7 to help you select the right specs for any job.",
+		"description": "Not sure which laptop fits your budget or workload? Our team will help you pick the right one.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/><path d="M20 19a4 4 0 0 1-4 3h-2"/></svg>',
 	},
 ]
 
 DEFAULT_BEST_SELLERS = [
-	{"brand": "DEWALT", "name": "20V MAX XR Brushless Orbital Sander", "sku": "DW-OS-9921", "price_value": 189.0, "badge": "Best Seller"},
-	{"brand": "MILWAUKEE", "name": 'M18 FUEL 1/2" High Torque Impact Wrench', "sku": "MW-IW-4410", "price_value": 299.0, "badge": "In Stock"},
-	{"brand": "3M SAFETY", "name": "SecureFit Vented Safety Helmet with Visor", "sku": "3M-SH-005", "price_value": 45.5, "badge": ""},
-	{"brand": "CAMPBELL HAUSFELD", "name": "20-Gallon Vertical Air Compressor 150 PSI", "sku": "CH-AC-20V", "price_value": 549.0, "badge": ""},
+	{"brand": "DELL", "name": "Dell XPS 13 Plus - OLED Touch, Core i7 13th Gen", "sku": "PRM-DELL-XPS13", "price_value": 0.0, "badge": "Best Seller"},
+	{"brand": "HP", "name": "HP OMEN 16 - AMD Ryzen 7, Gaming Laptop", "sku": "GMG-HP-OMEN16", "price_value": 0.0, "badge": "In Stock"},
+	{"brand": "LENOVO", "name": "Lenovo ThinkPad X1 Carbon Gen 11 - Business Laptop", "sku": "PRM-TP-X1C", "price_value": 0.0, "badge": ""},
+	{"brand": "APPLE", "name": 'Apple MacBook Pro 16" - M3 Max Chip, 1TB SSD', "sku": "PRM-MBP-16-M3", "price_value": 0.0, "badge": ""},
 ]
 
-DEFAULT_BRANDS = ["MAKITA", "BOSCH", "DEWALT", "3M SAFETY", "HILTI", "MILWAUKEE"]
+DEFAULT_BRANDS = ["DELL", "HP", "LENOVO", "ASUS", "ACER", "APPLE", "MSI", "MICROSOFT"]
 
 DEFAULT_HERO_SUBTEXT = (
-	"Streamline your B2B operations with over 10,000 SKUs from world-leading "
-	"manufacturers. Quality verified, logistics guaranteed."
+	"Genuine new and refurbished laptops from Dell, HP, Lenovo, Apple, Asus & "
+	"more — with official warranty, nationwide delivery, and Cash on Delivery "
+	"available across Pakistan."
 )
 
 
@@ -89,22 +90,22 @@ def get_context(context):
 
 	landing = frappe._dict(
 		# Hero
-		hero_badge=val("hero_badge", "Established 1984"),
-		hero_heading=val("hero_heading", "The Gold Standard in"),
-		hero_heading_highlight=val("hero_heading_highlight", "Industrial Supply"),
+		hero_badge=val("hero_badge", "Pakistan's Laptop Store"),
+		hero_heading=val("hero_heading", "Best Deals on"),
+		hero_heading_highlight=val("hero_heading_highlight", "New & Refurbished Laptops"),
 		hero_subtext=val("hero_subtext", DEFAULT_HERO_SUBTEXT),
 		hero_button_text=val("hero_button_text", "Shop Now"),
 		hero_button_link=val("hero_button_link", "/all-products"),
-		hero_secondary_button_text=val("hero_secondary_button_text", "Request a Quote"),
-		hero_secondary_button_link=val("hero_secondary_button_link", "/request-quote"),
+		hero_secondary_button_text=val("hero_secondary_button_text", "Refurbished Deals"),
+		hero_secondary_button_link=val("hero_secondary_button_link", "/all-products?item_group=Refurbished Laptops"),
 		hero_background_image=(hp.get("hero_background_image") if hp else None),
 		hero_images=_hero_images(hp),
 		# Essential categories
-		categories_heading=val("categories_heading", "Essential Categories"),
+		categories_heading=val("categories_heading", "Shop by Category"),
 		categories_subtext=val(
 			"categories_subtext",
-			"Browse our curated selection of high-performance industrial equipment "
-			"tailored for professional requirements.",
+			"Find the perfect laptop for study, gaming, or business — brand new or "
+			"budget-friendly refurbished.",
 		),
 		category_cards=_rows_or_default(row_table("category_cards"), DEFAULT_CATEGORY_CARDS,
 			fields=("title", "subtitle", "link", "is_large", "image")),
@@ -112,16 +113,16 @@ def get_context(context):
 		best_sellers_heading=val("best_sellers_heading", "Best Sellers"),
 		best_sellers=_featured_products(row_table("featured_products")) or products.get_best_sellers(4) or _default_best_sellers(),
 		# Promotion banner
-		promo_title=val("promo_title", "Precision Performance"),
-		promo_subtitle=val("promo_subtitle", "Now Within Reach"),
+		promo_title=val("promo_title", "Refurbished Laptops"),
+		promo_subtitle=val("promo_subtitle", "Same Performance, Better Price"),
 		promo_text=val(
 			"promo_text",
-			"Save up to 30% on bulk machining equipment and precision lathes for "
-			"corporate account holders. Limitless efficiency, legendary durability.",
+			"Fully tested, dependable laptops from Dell, HP, Lenovo & Apple at a "
+			"fraction of the brand-new price — perfect for students and professionals.",
 		),
-		promo_button_text=val("promo_button_text", "View Special Offer"),
-		promo_button_link=val("promo_button_link", "#"),
-		promo_note=val("promo_note", "Ends in 48 hours"),
+		promo_button_text=val("promo_button_text", "Shop Refurbished"),
+		promo_button_link=val("promo_button_link", "/all-products?item_group=Refurbished Laptops"),
+		promo_note=val("promo_note", "Limited Stock Available"),
 		promo_image=(hp.get("promo_image") if hp else None),
 		# Brand strip
 		brands=_brands(val("brands")) or DEFAULT_BRANDS,
@@ -129,10 +130,10 @@ def get_context(context):
 		features=_rows_or_default(row_table("feature_items"), DEFAULT_FEATURES,
 			fields=("title", "description", "icon")),
 		# Newsletter
-		newsletter_title=val("newsletter_title", "Stay Informed"),
+		newsletter_title=val("newsletter_title", "Get the Best Laptop Deals"),
 		newsletter_subtitle=val(
 			"newsletter_subtitle",
-			"Get technical bulletins, industry news, and exclusive B2B offers.",
+			"Subscribe for new arrivals, price drops, and exclusive discounts.",
 		),
 	)
 
@@ -152,7 +153,7 @@ def get_context(context):
 	context.metatags = {
 		"title": context.title,
 		"description": context.description,
-		"keywords": wsval("custom_meta_keywords", "industrial supply, b2b wholesale, tools, equipment"),
+		"keywords": wsval("custom_meta_keywords", "laptops in pakistan, new laptops, refurbished laptops, dell, hp, lenovo, apple"),
 		"image": ws.get("custom_meta_image") or "",
 		"og:type": "website",
 	}
@@ -225,7 +226,7 @@ def subscribe(email=None):
 	email = (email or "").strip()
 	if not email or not validate_email_address(email):
 		frappe.local.response["http_status_code"] = 400
-		return {"ok": False, "message": "Please enter a valid business email address."}
+		return {"ok": False, "message": "Please enter a valid email address."}
 
 	try:
 		group = frappe.db.get_value("Email Group", {"title": "Website"}) or frappe.db.get_value("Email Group", {})

@@ -19,9 +19,9 @@
   {"fieldname": "company_name", "fieldtype": "Data", "in_list_view": 1, "label": "Company Name"},
   {"fieldname": "email", "fieldtype": "Data", "in_list_view": 1, "label": "Email", "options": "Email", "reqd": 1},
   {"fieldname": "phone", "fieldtype": "Data", "label": "Phone Number"},
-  {"fieldname": "square_footage", "fieldtype": "Data", "label": "Square Footage"},
+  {"fieldname": "square_footage", "fieldtype": "Data", "label": "Quantity Needed"},
   {"fieldname": "message", "fieldtype": "Text", "label": "Message"},
-  {"fieldname": "type_of_business", "fieldtype": "Select", "in_list_view": 1, "label": "Type of Business", "options": "\nRetailer\nWholesaler\nDistributor\nManufacturer\nOther"},
+  {"fieldname": "type_of_business", "fieldtype": "Select", "in_list_view": 1, "label": "Type of Business", "options": "\nSchool / Institution\nCorporate / Office\nRetailer\nOther"},
   {"fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "New\nReviewed\nQuoted\nClosed", "default": "New"}
  ],
  "index_web_pages_for_search": 1,

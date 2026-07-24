@@ -17,13 +17,16 @@ from ecommerce.website_context import get_chrome
 no_cache = 1
 
 DEFAULT_SUBTITLE = (
-	"Have a question about bulk orders, pricing, or logistics? Our team is here "
-	"to help — reach out and we'll respond within one business day."
+	"Have a question about an order, a laptop's specs, or bulk pricing? Our "
+	"team is here to help — reach out and we'll respond within one business day."
 )
-DEFAULT_EMAIL = "info@dollorbasket.com"
-DEFAULT_PHONE = "+1 281-822-1544"
-DEFAULT_ADDRESS = "11015 North Sam Houston Pkwy W,Houston, TX 77064 United States"
-DEFAULT_HOURS = "Monday – Friday, 8:00 AM – 6:00 PM (CST)"
+# Left blank on purpose — fill in the real contact details via Contact Page
+# Settings in the Desk. The template hides each row until it has a value, so
+# an unset field never shows a placeholder to a customer.
+DEFAULT_EMAIL = ""
+DEFAULT_PHONE = ""
+DEFAULT_ADDRESS = ""
+DEFAULT_HOURS = ""
 DEFAULT_FORM_SUBTITLE = "Fill out the form and a representative will get back to you shortly."
 DEFAULT_SUCCESS = "Thanks! Your message has been sent. Our team will get back to you shortly."
 

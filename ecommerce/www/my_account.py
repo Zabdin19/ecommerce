@@ -34,5 +34,5 @@ def get_context(context):
 	context.current_year = frappe.utils.now_datetime().year
 	context.no_cache = 1
 	context.title = f"My Account | {context.chrome.brand}"
-	context.metatags = {"title": context.title, "description": "Manage your procurement account."}
+	context.metatags = {"title": context.title, "description": "Manage your account and orders."}
 	return context

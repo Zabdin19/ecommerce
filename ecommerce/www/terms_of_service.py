@@ -27,7 +27,7 @@ any order.</p>
 
 <h2>4. Shipping &amp; Returns</h2>
 <p>Delivery timelines are estimates. Returns and refunds are handled according to
-our standard wholesale policy — contact our team for assistance.</p>
+our standard returns policy — contact our team for assistance.</p>
 
 <h2>5. Limitation of Liability</h2>
 <p>We are not liable for any indirect or consequential damages arising from the use

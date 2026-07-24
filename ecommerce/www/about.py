@@ -18,65 +18,60 @@ no_cache = 1
 
 
 DEFAULT_SUBTITLE = (
-	"Powering industrial procurement for enterprises worldwide — quality "
-	"verified, logistics guaranteed, since 1984."
+	"Pakistan's trusted online store for new and refurbished laptops — genuine "
+	"products, official warranty, and nationwide delivery."
 )
 
 DEFAULT_STORY_BODY = (
-	"<p>What began in 1984 as a single regional warehouse has grown into one of "
-	"the most trusted names in industrial distribution. We supply the tools, "
-	"equipment, and components that keep factories, job sites, and supply chains "
-	"moving.</p>"
-	"<p>Today we serve thousands of enterprise customers with over 10,000 SKUs "
-	"from the world's leading manufacturers — backed by the logistics network "
-	"and technical expertise our partners depend on.</p>"
+	"<p>Lapmarkaz started with a simple idea: buying a laptop online in Pakistan "
+	"should be easy, transparent, and worry-free. We carry brand new laptops from "
+	"Dell, HP, Lenovo, Asus, Acer, Apple, MSI and Microsoft, along with fully "
+	"tested refurbished options for anyone who wants great performance at a "
+	"lower price.</p>"
+	"<p>Every laptop that leaves our warehouse is inspected and tested before it "
+	"ships — with Cash on Delivery available across Pakistan and support to "
+	"help you pick the right machine for your budget and workload.</p>"
 )
 
 DEFAULT_STATS = [
-	{"value": "40+", "label": "Years in Business"},
-	{"value": "500K+", "label": "SKUs Available"},
-	{"value": "12K+", "label": "Enterprise Clients"},
-	{"value": "99.2%", "label": "On-time Delivery"},
+	{"value": "1000+", "label": "Laptops Delivered"},
+	{"value": "8+", "label": "Brands Available"},
+	{"value": "60+", "label": "Cities Covered"},
+	{"value": "4.6★", "label": "Average Rating"},
 ]
 
 DEFAULT_MISSION = (
-	"To give every business reliable, fast access to the industrial supplies "
-	"they need — with transparent pricing, verified quality, and logistics they "
-	"can count on."
+	"To make buying a laptop online in Pakistan simple and trustworthy — with "
+	"genuine products, honest pricing, and support that actually helps."
 )
 DEFAULT_VISION = (
-	"To be the most trusted B2B procurement platform in the industry, connecting "
-	"manufacturers and enterprises through technology and service."
+	"To be the most trusted laptop store in Pakistan, for new and refurbished "
+	"laptops alike."
 )
 
 DEFAULT_VALUES = [
 	{
-		"title": "Quality Verified",
-		"description": "Every product is sourced from certified manufacturers and quality-checked before it reaches you.",
+		"title": "100% Genuine",
+		"description": "Every laptop is sourced from trusted suppliers and tested before it reaches you.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>',
 	},
 	{
-		"title": "Logistics Guaranteed",
-		"description": "A nationwide distribution network delivers on time, every time, with full shipment tracking.",
+		"title": "Nationwide Delivery",
+		"description": "Fast, tracked delivery to every city in Pakistan, with Cash on Delivery available.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="17" r="1.6"/><circle cx="17.5" cy="17" r="1.6"/></svg>',
 	},
 	{
 		"title": "Expert Support",
-		"description": "Technical advisors available 24/7 to help you select the right specs for any job.",
+		"description": "Not sure which laptop is right for you? Our team is here to help you decide.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/></svg>',
 	},
 ]
 
-DEFAULT_TEAM = [
-	{"member_name": "Eleanor Vance", "role": "Chief Executive Officer", "image": None},
-	{"member_name": "Marcus Reid", "role": "VP, Supply Chain", "image": None},
-	{"member_name": "Priya Nair", "role": "Head of Engineering", "image": None},
-	{"member_name": "David Okafor", "role": "Director, Client Success", "image": None},
-]
+DEFAULT_TEAM = []
 
 DEFAULT_CTA = (
-	"Open a corporate account and streamline your procurement with dedicated "
-	"support, bulk pricing, and NET-30 terms."
+	"Looking for laptops in bulk for your office or institution? Get in touch "
+	"for special pricing and dedicated support."
 )
 
 
