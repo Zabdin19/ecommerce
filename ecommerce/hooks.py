@@ -1,7 +1,7 @@
 app_name = "ecommerce"
-app_title = "Ecommerce"
+app_title = "DollarBasket"
 app_publisher = "Zain-ul-Abdin"
-app_description = "E-commerce custom application"
+app_description = "DollarBasket B2B ecommerce storefront"
 app_email = "zainulabdin1220@gmail.com"
 app_license = "mit"
 
@@ -67,8 +67,10 @@ fixtures = [
 # Home Pages
 # ----------
 
-# application home page (will override Website Settings)
-# home_page = "login"
+# Use a route unique to this app. ERPNext also provides a built-in `home`
+# template, which otherwise shadows `ecommerce/www/home.html` when the Website
+# Settings home page is set to "home".
+home_page = "storefront"
 
 # website user home page (by Role)
 # role_home_page = {

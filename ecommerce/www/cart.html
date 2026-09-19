@@ -57,10 +57,6 @@
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
 						Continue Shopping
 					</a>
-					<div class="fe-cart__protect">
-						<span>Shipping protection included?</span>
-						<label class="fe-switch"><input type="checkbox"><span></span></label>
-					</div>
 				</div>
 			</section>
 
@@ -68,14 +64,8 @@
 				<div class="fe-summary">
 					<h3>Order Summary</h3>
 					<div class="fe-summary__row"><span>Subtotal</span><span class="fe-cart__subtotal">{{ summary.subtotal }}</span></div>
-					<div class="fe-summary__row"><span>Shipping Estimate</span><span>{{ summary.shipping }}</span></div>
+					<div class="fe-summary__row"><span>Shipping</span><span>{{ summary.shipping }}</span></div>
 					<div class="fe-summary__total"><div><strong>Total</strong><small>Net Payable Amount</small></div><span class="fe-cart__grandtotal">{{ summary.total }}</span></div>
-
-					<span class="fe-summary__label">Coupon Code</span>
-					<div class="fe-coupon">
-						<input type="text" placeholder="Enter code">
-						<button class="fe-btn fe-btn--navy">Apply</button>
-					</div>
 
 					<a href="{% if chrome.logged_in %}/checkout{% else %}/sign-in?redirect=/checkout{% endif %}" class="fe-btn fe-btn--gold fe-btn--block fe-summary__checkout">
 						Proceed to Checkout
@@ -87,8 +77,8 @@
 				<div class="fe-support">
 					<div class="fe-support__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/></svg></div>
 					<div>
-						<strong>Need Help Choosing?</strong>
-						<p>Not sure which laptop fits your budget or workload? Our support team is available 24/7.</p>
+						<strong>Need Purchasing Help?</strong>
+						<p>Contact our team with a product, order, or bulk purchasing question.</p>
 						<a href="/contact">Contact Support</a>
 					</div>
 				</div>

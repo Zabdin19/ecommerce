@@ -2,7 +2,7 @@
 {% include "templates/includes/theme.html" %}
 <header class="fe-header">
 	<div class="fe-container fe-header__inner">
-		<a href="/" class="fe-brand">
+		<a href="/" class="fe-brand" aria-label="{{ chrome.brand }} home">
 			{% if chrome.logo %}<img src="{{ chrome.logo }}" alt="{{ chrome.brand }}">{% else %}{{ chrome.brand }}{% endif %}
 		</a>
 		<form class="fe-search" role="search" action="/all-products" method="get">

@@ -3,9 +3,8 @@
 
 """Catalog API: list/search/filter products, categories, brands, product detail.
 
-Sources data from ERPNext **Item** (+ Item Price, Bin, Item Group). Ratings are
-a deterministic placeholder because the site has no review data; swap
-``_rating`` for a real source (e.g. an Item Review doctype) when available.
+Sources data from ERPNext **Item** (+ Item Price, Bin and Item Group). Product
+ratings are intentionally omitted until the site has a real review source.
 """
 
 import math
@@ -33,11 +32,6 @@ def _price_map():
 	return {r.item_code: r.price_list_rate for r in rows}
 
 
-def _rating(item_code):
-	h = sum(ord(c) for c in (item_code or "x"))
-	return round(4.0 + (h % 10) / 10.0, 1)
-
-
 def _badge(stock):
 	return "In Stock" if stock > 0 else "Out of Stock"
 
@@ -49,7 +43,7 @@ def _card(it):
 		"brand": (it.brand or it.item_group or "").upper(),
 		"sku": it.name,
 		"name": it.item_name or it.name,
-		"rating": _rating(it.name),
+		"rating": None,
 		"price": money(price),
 		"price_value": price,
 		"badge": _badge(stock),
@@ -60,11 +54,17 @@ def _card(it):
 def list_products(q=None, item_group=None, brand=None, sort=None, page=1, page_size=PAGE_SIZE, price_max=None):
 	page = max(1, cint(page))
 	filters = {"disabled": 0, "is_sales_item": 1}
-	if item_group == "Laptops":
-		# "Laptops" is the umbrella group (parent of New/Refurbished) — match either child.
-		filters["item_group"] = ["in", ["New Laptops", "Refurbished Laptops"]]
-	elif item_group:
-		filters["item_group"] = item_group
+	if item_group:
+		group = frappe.db.get_value("Item Group", item_group, ["is_group", "lft", "rgt"], as_dict=True)
+		if group and group.is_group:
+			descendants = frappe.get_all(
+				"Item Group",
+				filters={"lft": [">", group.lft], "rgt": ["<", group.rgt], "is_group": 0},
+				pluck="name",
+			)
+			filters["item_group"] = ["in", descendants] if descendants else item_group
+		else:
+			filters["item_group"] = item_group
 	if brand:
 		filters["brand"] = brand
 	or_filters = None
@@ -133,16 +133,14 @@ def page_numbers(total, page, page_size=PAGE_SIZE):
 
 
 def get_categories():
-	"""Catalog sidebar order: the laptop umbrella + its two conditions first,
-	then any other leaf group (e.g. Accessories), alphabetically."""
-	leading = [g for g in ("Laptops", "New Laptops", "Refurbished Laptops") if frappe.db.exists("Item Group", g)]
-	rest = frappe.get_all(
+	"""Return the site's configured leaf catalogue groups alphabetically."""
+	groups = frappe.get_all(
 		"Item Group",
-		filters={"is_group": 0, "name": ["not in", ["New Laptops", "Refurbished Laptops"]]},
+		filters={"is_group": 0},
 		fields=["name"],
 		order_by="name asc",
 	)
-	return leading + [g.name for g in rest if g.name != "All Item Groups"]
+	return [group.name for group in groups if group.name != "All Item Groups"]
 
 
 def get_manufacturers(selected=None):
@@ -218,13 +216,13 @@ def get_product_detail(item_code):
 		"sku": it.item_code,
 		"item_code": it.item_code,
 		"name": it.item_name or it.name,
-		"rating": _rating(item_code),
+		"rating": None,
 		"review_count": 0,
 		"price": money(get_price(item_code)),
 		"price_value": get_price(item_code),
 		"old_price": None,
 		"save_label": None,
-		"price_note": "Excl. VAT & Shipping costs",
+		"price_note": "Price from the active storefront price list; shipping is shown at checkout.",
 		"gallery": gallery,
 		"description_title": it.item_name or it.name,
 		"description_html": it.description or "",

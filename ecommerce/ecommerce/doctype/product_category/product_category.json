@@ -1,0 +1,125 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "CAT-.#####",
+ "creation": "2025-08-17 07:53:05.788762",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "banner_image_view",
+  "banner_image",
+  "section_break_sdiw",
+  "title",
+  "company",
+  "erp_id",
+  "column_break_gumt",
+  "category_image",
+  "web_ranking",
+  "app_ranking",
+  "section_break_fcxy",
+  "subcategories"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Title",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_fcxy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "subcategories",
+   "fieldtype": "Table",
+   "label": "SubCategories",
+   "options": "SubCategories"
+  },
+  {
+   "fieldname": "column_break_gumt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "category_image",
+   "fieldtype": "Attach Image",
+   "label": "Category Image"
+  },
+  {
+   "fieldname": "banner_image_view",
+   "fieldtype": "Image",
+   "label": "Banner Image View",
+   "options": "banner_image"
+  },
+  {
+   "fieldname": "banner_image",
+   "fieldtype": "Attach Image",
+   "label": "Banner Image"
+  },
+  {
+   "fieldname": "section_break_sdiw",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "Cotton Valley",
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "web_ranking",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Web Ranking"
+  },
+  {
+   "fieldname": "app_ranking",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "App Ranking"
+  },
+  {
+   "fieldname": "erp_id",
+   "fieldtype": "Data",
+   "label": "ERP ID"
+  }
+ ],
+ "grid_page_length": 50,
+ "image_field": "category_image",
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-12-23 06:11:27.480433",
+ "modified_by": "Administrator",
+ "module": "Ecommerce",
+ "name": "Product Category",
+ "naming_rule": "Expression (old style)",
+ "owner": "saad@gmail.com",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "import": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "title"
+}

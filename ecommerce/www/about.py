@@ -18,51 +18,41 @@ no_cache = 1
 
 
 DEFAULT_SUBTITLE = (
-	"Pakistan's trusted online store for new and refurbished laptops — genuine "
-	"products, official warranty, and nationwide delivery."
+	"DollarBasket is a B2B ecommerce platform for business customers, retailers, "
+	"resellers, and wholesale buyers."
 )
 
 DEFAULT_STORY_BODY = (
-	"<p>Lapmarkaz started with a simple idea: buying a laptop online in Pakistan "
-	"should be easy, transparent, and worry-free. We carry brand new laptops from "
-	"Dell, HP, Lenovo, Asus, Acer, Apple, MSI and Microsoft, along with fully "
-	"tested refurbished options for anyone who wants great performance at a "
-	"lower price.</p>"
-	"<p>Every laptop that leaves our warehouse is inspected and tested before it "
-	"ships — with Cash on Delivery available across Pakistan and support to "
-	"help you pick the right machine for your budget and workload.</p>"
+	"<p>DollarBasket provides a straightforward online purchasing experience for "
+	"organisations and trade buyers. Customers can browse the live product catalogue, "
+	"manage an account and place orders through the storefront.</p>"
+	"<p>Businesses with larger requirements can submit a quote request with the "
+	"products, quantities and company details their enquiry requires.</p>"
 )
 
-DEFAULT_STATS = [
-	{"value": "1000+", "label": "Laptops Delivered"},
-	{"value": "8+", "label": "Brands Available"},
-	{"value": "60+", "label": "Cities Covered"},
-	{"value": "4.6★", "label": "Average Rating"},
-]
+DEFAULT_STATS = []
 
 DEFAULT_MISSION = (
-	"To make buying a laptop online in Pakistan simple and trustworthy — with "
-	"genuine products, honest pricing, and support that actually helps."
+	"To make business purchasing clear and efficient through a focused B2B ecommerce experience."
 )
 DEFAULT_VISION = (
-	"To be the most trusted laptop store in Pakistan, for new and refurbished "
-	"laptops alike."
+	"To help business customers source and order products with confidence."
 )
 
 DEFAULT_VALUES = [
 	{
-		"title": "100% Genuine",
-		"description": "Every laptop is sourced from trusted suppliers and tested before it reaches you.",
+		"title": "Business Focus",
+		"description": "The storefront is designed around organisational and trade purchasing needs.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>',
 	},
 	{
-		"title": "Nationwide Delivery",
-		"description": "Fast, tracked delivery to every city in Pakistan, with Cash on Delivery available.",
+		"title": "Clear Catalogue",
+		"description": "Search and filter products using live catalogue information.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="17" r="1.6"/><circle cx="17.5" cy="17" r="1.6"/></svg>',
 	},
 	{
-		"title": "Expert Support",
-		"description": "Not sure which laptop is right for you? Our team is here to help you decide.",
+		"title": "Quote Requests",
+		"description": "Send product and quantity requirements to the team for review.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/></svg>',
 	},
 ]
@@ -70,8 +60,8 @@ DEFAULT_VALUES = [
 DEFAULT_TEAM = []
 
 DEFAULT_CTA = (
-	"Looking for laptops in bulk for your office or institution? Get in touch "
-	"for special pricing and dedicated support."
+	"Planning a bulk or wholesale purchase? Send your requirements to our team "
+	"through the business quote form."
 )
 
 
@@ -93,7 +83,7 @@ def get_context(context):
 		return (ap.get(fieldname) if ap else None) or None
 
 	about = frappe._dict(
-		page_title=val("page_title", "About Lapmarkaz"),
+		page_title=val("page_title", "About DollarBasket"),
 		page_subtitle=val("page_subtitle", DEFAULT_SUBTITLE),
 		hero_image=(ap.get("hero_image") if ap else None),
 		story_heading=val("story_heading", "Our Story"),

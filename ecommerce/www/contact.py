@@ -17,16 +17,16 @@ from ecommerce.website_context import get_chrome
 no_cache = 1
 
 DEFAULT_SUBTITLE = (
-	"Have a question about an order, a laptop's specs, or bulk pricing? Our "
-	"team is here to help — reach out and we'll respond within one business day."
+	"Have a question about a product, an order, or a bulk requirement? Send the "
+	"DollarBasket team a message."
 )
-DEFAULT_EMAIL = "Info@lapmarkaz.pk"
-DEFAULT_PHONE = "+92 321 2789920"
-DEFAULT_ADDRESS = "Karachi, Pakistan"
+DEFAULT_EMAIL = ""
+DEFAULT_PHONE = ""
+DEFAULT_ADDRESS = ""
 # Business hours aren't set yet — leave blank; the template hides this row
 # until Contact Page Settings has a value, rather than show a guessed one.
 DEFAULT_HOURS = ""
-DEFAULT_FORM_SUBTITLE = "Fill out the form and a representative will get back to you shortly."
+DEFAULT_FORM_SUBTITLE = "Provide your contact details and a short description of your request."
 DEFAULT_SUCCESS = "Thanks! Your message has been sent. Our team will get back to you shortly."
 
 

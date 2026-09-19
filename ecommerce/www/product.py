@@ -12,22 +12,19 @@ import frappe
 
 from ecommerce.api import products
 from ecommerce.api import wishlist
-from ecommerce.api.common import money
 from ecommerce.website_context import get_chrome
 
 no_cache = 1
 
-FREE_DELIVERY_THRESHOLD = 15000
-
 DELIVERY_CARDS = [
 	{
-		"title": "Free Nationwide Delivery",
-		"text": "On orders over {threshold}, with Cash on Delivery available.",
+		"title": "Live Availability",
+		"text": "Availability is based on the current catalogue stock record.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="17" r="1.6"/><circle cx="17.5" cy="17" r="1.6"/></svg>',
 	},
 	{
-		"title": "Official Warranty",
-		"text": "New laptops include manufacturer warranty; refurbished laptops include our own warranty.",
+		"title": "Bulk Order Enquiries",
+		"text": "Use Request a Quote to share a larger product and quantity requirement.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/></svg>',
 	},
 ]
@@ -50,8 +47,7 @@ def get_context(context):
 	context.specs = detail["specs"]
 	context.reviews = []  # no review data on this site yet
 	context.related = detail["related"]
-	threshold = money(FREE_DELIVERY_THRESHOLD)
-	context.delivery_cards = [dict(c, text=c["text"].format(threshold=threshold)) for c in DELIVERY_CARDS]
+	context.delivery_cards = DELIVERY_CARDS
 	context.breadcrumbs = detail["breadcrumbs"]
 	context.current_year = frappe.utils.now_datetime().year
 	context.no_cache = 1

@@ -1,7 +1,7 @@
 # Copyright (c) 2024, Zain-ul-Abdin and contributors
 # For license information, please see license.txt
 
-"""Controller for the Ecommerce landing page (`/home`).
+"""Controller for the DollarBasket storefront (served at `/storefront`).
 
 All visible content is driven by the standard **Website Settings** DocType,
 which the Ecommerce app extends with custom fields (see
@@ -24,54 +24,48 @@ no_cache = 1
 
 DEFAULT_CATEGORY_CARDS = [
 	{
-		"title": "New Laptops",
-		"subtitle": "Dell, HP, Lenovo, Asus, Acer, Apple & MSI — brand new, sealed box",
-		"link": "/all-products?item_group=New Laptops",
+		"title": "Product Catalogue",
+		"subtitle": "Browse products available to business customers.",
+		"link": "/all-products",
 		"is_large": 1,
 		"image": None,
 	},
-	{"title": "Refurbished Laptops", "subtitle": "", "link": "/all-products?item_group=Refurbished Laptops", "is_large": 0, "image": None},
-	{"title": "All Laptops", "subtitle": "", "link": "/all-products?item_group=Laptops", "is_large": 0, "image": None},
 	{
-		"title": "Laptop Accessories",
-		"subtitle": "",
-		"link": "/all-products?item_group=Accessories",
+		"title": "Bulk Orders",
+		"subtitle": "Tell us what your business needs.",
+		"link": "/request-quote",
 		"is_large": 0,
 		"image": None,
 	},
+	{"title": "Customer Account", "subtitle": "Manage orders and account details.", "link": "/my-account", "is_large": 0, "image": None},
+	{"title": "Contact Our Team", "subtitle": "Ask a product or order question.", "link": "/contact", "is_large": 0, "image": None},
 ]
 
 DEFAULT_FEATURES = [
 	{
-		"title": "Nationwide Delivery",
-		"description": "Fast, tracked delivery to every city in Pakistan, with Cash on Delivery available.",
+		"title": "Business Purchasing",
+		"description": "A focused catalogue and checkout experience for organisations and trade buyers.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h11v8H3z"/><path d="M14 10h4l3 3v2h-7z"/><circle cx="7" cy="17" r="1.6"/><circle cx="17.5" cy="17" r="1.6"/></svg>',
 	},
 	{
-		"title": "100% Genuine & Tested",
-		"description": "Every new and refurbished laptop is inspected and tested before it ships.",
+		"title": "Bulk Enquiries",
+		"description": "Submit a quote request with your company details and required quantity.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/><path d="M11 7h4a2 2 0 0 1 2 2v4"/></svg>',
 	},
 	{
-		"title": "Expert Support",
-		"description": "Not sure which laptop fits your budget or workload? Our team will help you pick the right one.",
+		"title": "Account and Order Access",
+		"description": "Registered customers can manage profile details, addresses, and order history.",
 		"icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/><path d="M20 19a4 4 0 0 1-4 3h-2"/></svg>',
 	},
 ]
 
-DEFAULT_BEST_SELLERS = [
-	{"brand": "DELL", "name": "Dell XPS 13 Plus - OLED Touch, Core i7 13th Gen", "sku": "PRM-DELL-XPS13", "price_value": 0.0, "badge": "Best Seller"},
-	{"brand": "HP", "name": "HP OMEN 16 - AMD Ryzen 7, Gaming Laptop", "sku": "GMG-HP-OMEN16", "price_value": 0.0, "badge": "In Stock"},
-	{"brand": "LENOVO", "name": "Lenovo ThinkPad X1 Carbon Gen 11 - Business Laptop", "sku": "PRM-TP-X1C", "price_value": 0.0, "badge": ""},
-	{"brand": "APPLE", "name": 'Apple MacBook Pro 16" - M3 Max Chip, 1TB SSD', "sku": "PRM-MBP-16-M3", "price_value": 0.0, "badge": ""},
-]
+DEFAULT_BEST_SELLERS = []
 
-DEFAULT_BRANDS = ["DELL", "HP", "LENOVO", "ASUS", "ACER", "APPLE", "MSI", "MICROSOFT"]
+DEFAULT_BRANDS = []
 
 DEFAULT_HERO_SUBTEXT = (
-	"Genuine new and refurbished laptops from Dell, HP, Lenovo, Apple, Asus & "
-	"more — with official warranty, nationwide delivery, and Cash on Delivery "
-	"available across Pakistan."
+	"Browse products, place business orders, or send a quote request for a bulk "
+	"requirement through a professional purchasing experience."
 )
 
 
@@ -90,39 +84,37 @@ def get_context(context):
 
 	landing = frappe._dict(
 		# Hero
-		hero_badge=val("hero_badge", "Pakistan's Laptop Store"),
-		hero_heading=val("hero_heading", "Best Deals on"),
-		hero_heading_highlight=val("hero_heading_highlight", "New & Refurbished Laptops"),
+		hero_badge=val("hero_badge", "B2B ECOMMERCE"),
+		hero_heading=val("hero_heading", "Business buying,"),
+		hero_heading_highlight=val("hero_heading_highlight", "made straightforward"),
 		hero_subtext=val("hero_subtext", DEFAULT_HERO_SUBTEXT),
-		hero_button_text=val("hero_button_text", "Shop Now"),
+		hero_button_text=val("hero_button_text", "Browse Catalogue"),
 		hero_button_link=val("hero_button_link", "/all-products"),
-		hero_secondary_button_text=val("hero_secondary_button_text", "Refurbished Deals"),
-		hero_secondary_button_link=val("hero_secondary_button_link", "/all-products?item_group=Refurbished Laptops"),
+		hero_secondary_button_text=val("hero_secondary_button_text", "Request a Quote"),
+		hero_secondary_button_link=val("hero_secondary_button_link", "/request-quote"),
 		hero_background_image=(hp.get("hero_background_image") if hp else None),
 		hero_images=_hero_images(hp),
 		# Essential categories
-		categories_heading=val("categories_heading", "Shop by Category"),
+		categories_heading=val("categories_heading", "Ways to Buy"),
 		categories_subtext=val(
 			"categories_subtext",
-			"Find the perfect laptop for study, gaming, or business — brand new or "
-			"budget-friendly refurbished.",
+			"Use the online catalogue for standard orders or contact our team about a bulk requirement.",
 		),
 		category_cards=_rows_or_default(row_table("category_cards"), DEFAULT_CATEGORY_CARDS,
 			fields=("title", "subtitle", "link", "is_large", "image")),
 		# Featured products — admin-picked Items, else best-sellers, else demo
-		best_sellers_heading=val("best_sellers_heading", "Best Sellers"),
+		best_sellers_heading=val("best_sellers_heading", "Featured Products"),
 		best_sellers=_featured_products(row_table("featured_products")) or products.get_best_sellers(4) or _default_best_sellers(),
 		# Promotion banner
-		promo_title=val("promo_title", "Refurbished Laptops"),
-		promo_subtitle=val("promo_subtitle", "Same Performance, Better Price"),
+		promo_title=val("promo_title", "Bulk Purchasing"),
+		promo_subtitle=val("promo_subtitle", "Request a Business Quote"),
 		promo_text=val(
 			"promo_text",
-			"Fully tested, dependable laptops from Dell, HP, Lenovo & Apple at a "
-			"fraction of the brand-new price — perfect for students and professionals.",
+			"Share your product and quantity requirements so the team can review your enquiry.",
 		),
-		promo_button_text=val("promo_button_text", "Shop Refurbished"),
-		promo_button_link=val("promo_button_link", "/all-products?item_group=Refurbished Laptops"),
-		promo_note=val("promo_note", "Limited Stock Available"),
+		promo_button_text=val("promo_button_text", "Request a Quote"),
+		promo_button_link=val("promo_button_link", "/request-quote"),
+		promo_note=val("promo_note", "For business and wholesale enquiries"),
 		promo_image=(hp.get("promo_image") if hp else None),
 		# Brand strip
 		brands=_brands(val("brands")) or DEFAULT_BRANDS,
@@ -130,10 +122,10 @@ def get_context(context):
 		features=_rows_or_default(row_table("feature_items"), DEFAULT_FEATURES,
 			fields=("title", "description", "icon")),
 		# Newsletter
-		newsletter_title=val("newsletter_title", "Get the Best Laptop Deals"),
+		newsletter_title=val("newsletter_title", "Stay Informed"),
 		newsletter_subtitle=val(
 			"newsletter_subtitle",
-			"Subscribe for new arrivals, price drops, and exclusive discounts.",
+			"Subscribe for catalogue and product updates from DollarBasket.",
 		),
 	)
 
@@ -153,7 +145,7 @@ def get_context(context):
 	context.metatags = {
 		"title": context.title,
 		"description": context.description,
-		"keywords": wsval("custom_meta_keywords", "laptops in pakistan, new laptops, refurbished laptops, dell, hp, lenovo, apple"),
+		"keywords": wsval("custom_meta_keywords", "DollarBasket, B2B ecommerce, business purchasing, bulk orders, wholesale catalogue"),
 		"image": ws.get("custom_meta_image") or "",
 		"og:type": "website",
 	}

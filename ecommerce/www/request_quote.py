@@ -3,8 +3,8 @@
 
 """Controller for the Request a Quote page (`/request-quote`).
 
-Renders a bulk-order quote-request form for schools, offices, and businesses
-buying laptops in quantity. Submissions are stored as **Ecommerce Quote
+Renders a bulk-order quote-request form for organisations and trade buyers.
+Submissions are stored as **Ecommerce Quote
 Request** records, viewable in Desk. The shared chrome is built by
 ``ecommerce.website_context.get_chrome``.
 """
@@ -18,10 +18,10 @@ no_cache = 1
 
 PAGE_TITLE = "Request a Quote"
 PAGE_SUBTITLE = (
-	"Buying laptops in bulk for your office, school, or business? Tell us what "
-	"you need and our team will prepare a tailored quote."
+	"Share the products, quantities, and business details for your bulk or "
+	"wholesale requirement."
 )
-BUSINESS_TYPES = ["School / Institution", "Corporate / Office", "Retailer", "Other"]
+BUSINESS_TYPES = ["Retailer / Reseller", "Corporate / Office", "School / Institution", "Other"]
 SUCCESS_MESSAGE = "Thanks! Your quote request has been received. Our team will get back to you shortly."
 
 
@@ -36,7 +36,7 @@ def get_context(context):
 	context.title = f"{PAGE_TITLE} | {chrome.brand}"
 	context.metatags = {
 		"title": context.title,
-		"description": "Request a quote for bulk laptop orders.",
+		"description": "Request a DollarBasket quote for a bulk or wholesale order.",
 		"og:type": "website",
 	}
 	return context

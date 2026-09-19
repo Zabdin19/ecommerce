@@ -29,7 +29,7 @@
 	</div>
 	<div class="fe-container fe-footer__bottom">
 		<span>© {{ current_year }} {{ chrome.copyright }}</span>
-		<span class="fe-footer__pay">VISA · NET 30 · MASTERCARD</span>
+		<span class="fe-footer__pay">B2B ECOMMERCE · BULK ORDER ENQUIRIES</span>
 	</div>
 </footer>
 
@@ -48,10 +48,12 @@
 		e.preventDefault();
 		var item = el.getAttribute("data-item");
 		if (!item) { window.location.href = "/cart"; return; }
+		var qtyInput = el.closest(".fe-pricecard") && el.closest(".fe-pricecard").querySelector("[data-stepper] input");
+		var qty = Math.max(1, parseInt(qtyInput && qtyInput.value, 10) || 1);
 		el.style.opacity = "0.5";
 		frappe.call({
 			method: "ecommerce.api.add_to_cart",
-			args: { item_code: item, qty: 1 },
+			args: { item_code: item, qty: qty },
 			callback: function (r) {
 				el.style.opacity = "";
 				if (r.message) window.feUpdateCartBadge(r.message.item_count);

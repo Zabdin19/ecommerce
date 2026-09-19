@@ -13,20 +13,20 @@ default that matches the reference design.
 import frappe
 
 DEFAULT_NAV = [
-	{"label": "New Laptops", "url": "/all-products?item_group=New Laptops"},
-	{"label": "Refurbished Laptops", "url": "/all-products?item_group=Refurbished Laptops"},
+	{"label": "Products", "url": "/all-products"},
+	{"label": "Bulk Orders", "url": "/request-quote"},
 	{"label": "About Us", "url": "/about"},
 	{"label": "Contact Us", "url": "/contact"},
 ]
 
 DEFAULT_FOOTER_COLUMNS = [
 	{
-		"heading": "Shop",
+		"heading": "Buy",
 		"links": [
-			{"label": "New Laptops", "url": "/all-products?item_group=New Laptops"},
-			{"label": "Refurbished Laptops", "url": "/all-products?item_group=Refurbished Laptops"},
-			{"label": "Laptop Accessories", "url": "/all-products?item_group=Accessories"},
+			{"label": "Product Catalogue", "url": "/all-products"},
 			{"label": "Request a Quote", "url": "/request-quote"},
+			{"label": "Shopping Cart", "url": "/cart"},
+			{"label": "Customer Account", "url": "/my-account"},
 		],
 	},
 	{
@@ -47,9 +47,9 @@ DEFAULT_LOGO_ON_DARK = "/assets/ecommerce/images/logo-light.svg"
 DEFAULT_LOGO_ON_LIGHT = "/assets/ecommerce/images/logo.svg"
 
 DEFAULT_FOOTER_DESCRIPTION = (
-	"Lapmarkaz is Pakistan's trusted online store for new and refurbished "
-	"laptops from Dell, HP, Lenovo, Apple, Asus & more — genuine products, "
-	"official warranty, and nationwide delivery."
+	"DollarBasket is a B2B ecommerce platform for business customers, retailers, "
+	"resellers, and wholesale buyers. Browse the catalogue or request a quote "
+	"for a bulk requirement."
 )
 
 
@@ -76,7 +76,9 @@ def get_chrome():
 	def hpval(fieldname, default=""):
 		return ((hp.get(fieldname) if hp else None) or "").strip() or default
 
-	brand = val("brand") or "Lapmarkaz"
+	# The application identity is authoritative when Website Settings has not
+	# been configured. A migration patch replaces known legacy brand values.
+	brand = val("brand") or val("app_name") or "DollarBasket"
 	uploaded_logo = (hp.get("header_logo") if hp else None) or settings.get("banner_image") or settings.get("app_logo")
 
 	# Storefront login state is intentionally separate from Frappe/Desk sid.
@@ -113,16 +115,16 @@ def get_chrome():
 		# `logo` is shown on the dark header/footer; `logo_on_light` on light pages.
 		logo=uploaded_logo or DEFAULT_LOGO_ON_DARK,
 		logo_on_light=uploaded_logo or DEFAULT_LOGO_ON_LIGHT,
-		search_placeholder=hpval("search_placeholder", "Search by brand, model, or specs..."),
-		announcement_text_1=hpval("topbar_free_freight_text", val("custom_announcement_text_1", "Free Delivery All Over Pakistan")),
-		announcement_text_2=hpval("topbar_distributor_text", val("custom_announcement_text_2", "100% Genuine Products with Official Warranty")),
+		search_placeholder=hpval("search_placeholder", "Search by product name, SKU, or brand…"),
+		announcement_text_1=hpval("topbar_free_freight_text", val("custom_announcement_text_1", "Built for business purchasing")),
+		announcement_text_2=hpval("topbar_distributor_text", val("custom_announcement_text_2", "Bulk order quote requests available")),
 		nav_items=_mark_active(nav_items(menu_rows)),
 		footer_description=val("custom_footer_description", DEFAULT_FOOTER_DESCRIPTION),
-		footer_contact_address=val("custom_footer_contact_address", "Karachi, Pakistan"),
-		footer_contact_phone=val("custom_footer_contact_phone", "+92 321 2789920"),
-		footer_contact_email=val("custom_footer_contact_email", "Info@lapmarkaz.pk"),
+		footer_contact_address=val("custom_footer_contact_address"),
+		footer_contact_phone=val("custom_footer_contact_phone"),
+		footer_contact_email=val("custom_footer_contact_email"),
 		footer_columns=footer_columns(settings.get("custom_footer_links")),
-		copyright=val("copyright", "Lapmarkaz. All Rights Reserved."),
+		copyright=val("copyright", "DollarBasket. All Rights Reserved."),
 		cart_count=cart_qty,
 		theme=theme,
 		logged_in=logged_in,

@@ -14,7 +14,7 @@
 	{% include "templates/includes/header.html" %}
 
 	<main class="fe-container fe-plp">
-		<nav class="fe-crumbs"><a href="/">Home</a><span class="fe-crumbs__sep">›</span><a href="/all-products">Shop</a><span class="fe-crumbs__sep">›</span><span class="fe-crumbs__cur">Laptops</span></nav>
+		<nav class="fe-crumbs"><a href="/">Home</a><span class="fe-crumbs__sep">›</span><span class="fe-crumbs__cur">Product Catalogue</span></nav>
 
 		<div class="fe-plp__layout">
 			<aside class="fe-filters">
@@ -25,7 +25,7 @@
 				<ul class="fe-filters__cats">
 					<li><a href="/all-products"{% if not active_group %} class="is-active"{% endif %}>All Products</a></li>
 					{% for c in categories %}
-					<li><a href="/all-products?item_group={{ c | urlencode }}"{% if c == active_group %} class="is-active"{% endif %}>{{ "All Laptops" if c == "Laptops" else c }}{% if c == active_group %}<span>›</span>{% endif %}</a></li>
+					<li><a href="/all-products?item_group={{ c | urlencode }}"{% if c == active_group %} class="is-active"{% endif %}>{{ c }}{% if c == active_group %}<span>›</span>{% endif %}</a></li>
 					{% endfor %}
 				</ul>
 
@@ -43,11 +43,6 @@
 					{% endfor %}
 				</div>
 				{% endif %}
-
-				<div class="fe-filters__toggle">
-					<span>In-Stock Only</span>
-					<label class="fe-switch"><input type="checkbox" checked><span></span></label>
-				</div>
 
 				<a href="/request-quote" class="fe-btn fe-btn--navy fe-btn--block">
 					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5h6l1 4H8z"/><path d="M5 9h14v10H5z"/></svg>
@@ -80,7 +75,6 @@
 						<div class="fe-product__body">
 							<span class="fe-product__brand">{{ p.brand }} • SKU: {{ p.sku }}</span>
 							<h4 class="fe-product__name"><a href="/product?item={{ p.sku }}">{{ p.name }}</a></h4>
-							<div class="fe-product__rate">{{ stars(p.rating) }}<span>({{ p.rating }})</span></div>
 							<div class="fe-product__foot">
 								<span class="fe-product__price">{{ p.price }}</span>
 								<button class="fe-cartbtn" data-add-to-cart data-item="{{ p.sku }}" aria-label="Add to cart">

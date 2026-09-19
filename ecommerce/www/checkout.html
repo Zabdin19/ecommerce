@@ -26,6 +26,7 @@
 						<label class="fe-field"><span>City</span><input type="text" name="city" placeholder="Lahore"></label>
 						<label class="fe-field"><span>Province</span><input type="text" name="state" placeholder="Punjab"></label>
 						<label class="fe-field"><span>Postal Code</span><input type="text" name="zip" placeholder="54000"></label>
+						<label class="fe-field"><span>Country</span><input type="text" name="country" placeholder="Country"></label>
 						<label class="fe-field fe-field--full"><span>Phone Number</span><input type="text" name="phone" placeholder="+92 300 1234567"></label>
 					</div>
 				</section>
@@ -35,7 +36,7 @@
 					<div class="fe-radios">
 						{% for m in shipping_methods %}
 						<label class="fe-radio{% if m.checked %} is-active{% endif %}">
-							<input type="radio" name="shipping"{% if m.checked %} checked{% endif %}>
+							<input type="radio" name="shipping" value="{{ m.id }}"{% if m.checked %} checked{% endif %}>
 							<span class="fe-radio__dot"></span>
 							<span class="fe-radio__body"><strong>{{ m.title }}</strong><small>{{ m.desc }}</small></span>
 							<span class="fe-radio__price">{{ m.price }}</span>
@@ -49,7 +50,7 @@
 					<div class="fe-paytiles">
 						{% for pm in payment_methods %}
 						<label class="fe-paytile{% if pm.checked %} is-active{% endif %}">
-							<input type="radio" name="payment"{% if pm.checked %} checked{% endif %}>
+							<input type="radio" name="payment" value="{{ pm.id }}"{% if pm.checked %} checked{% endif %}>
 							<span class="fe-paytile__icon">{{ pm.icon | safe }}</span>
 							<span>{{ pm.title }}</span>
 						</label>
@@ -71,12 +72,12 @@
 						{% endfor %}
 					</div>
 					<div class="fe-summary__row"><span>Subtotal</span><span>{{ summary.subtotal }}</span></div>
-					<div class="fe-summary__row"><span>Shipping Estimate</span><span>{{ summary.shipping }}</span></div>
+					<div class="fe-summary__row"><span>Shipping</span><span>{{ summary.shipping }}</span></div>
 					<div class="fe-summary__total"><strong>Total</strong><span>{{ summary.total }}</span></div>
 					<button type="button" id="fe-place-order" class="fe-btn fe-btn--gold fe-btn--block">Place Order
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 					</button>
-					<div class="fe-summary__trust"><span>🛡 Secure Checkout</span><span>🏅 100% Genuine Products</span></div>
+					<div class="fe-summary__trust"><span>Business account required</span><span>Order saved to your account</span></div>
 				</div>
 			</aside>
 		</div>
@@ -97,8 +98,12 @@
 		var payment = (document.querySelector('input[name="payment"]:checked') || {}).value;
 		var address = {
 			company: val("company"), full_name: val("full_name"), street: val("street"),
-			city: val("city"), state: val("state"), zip: val("zip"), phone: val("phone"),
+			city: val("city"), state: val("state"), zip: val("zip"), country: val("country"), phone: val("phone"),
 		};
+		if (!address.full_name || !address.street || !address.city || !address.country) {
+			alert("Please enter the recipient name, street address, city, and country.");
+			return;
+		}
 		function reset() { btn.disabled = false; btn.textContent = "Place Order"; }
 		function alert(msg, ind) { if (window.frappe && frappe.show_alert) frappe.show_alert({ message: msg, indicator: ind || "red" }); }
 		function loginRedirect() { window.location.href = "/sign-in?redirect=/checkout"; }

@@ -3,7 +3,7 @@ name = "ecommerce"
 authors = [
     { name = "Zain-ul-Abdin", email = "zainulabdin1220@gmail.com"}
 ]
-description = "E-commerce custom application"
+description = "DollarBasket B2B ecommerce storefront for Frappe and ERPNext"
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]

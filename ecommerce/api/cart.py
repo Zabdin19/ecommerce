@@ -13,6 +13,7 @@ On login the guest cookie cart is merged into the customer's Draft Sales Order
 Checkout still requires a customer session (handled by the checkout flow).
 """
 
+import json
 import uuid
 
 import frappe
@@ -23,7 +24,7 @@ from ecommerce.api.auth import get_current_customer_session, require_customer_se
 from ecommerce.api.common import get_price, money
 from ecommerce.api.common import price_list as default_price_list
 
-SHIPPING_VALUE = 45.0
+SHIPPING_VALUE = 0.0
 CART_COOKIE = "ecom_cart_token"
 
 DEMO_COUPONS = {"WELCOME10": 10, "BULK15": 15}
@@ -49,7 +50,7 @@ def _finalize(items, subtotal, count, sales_order):
 		"shipping_value": shipping,
 		"summary": {
 			"subtotal": money(subtotal),
-			"shipping": money(shipping),
+			"shipping": "Not included" if subtotal else money(0),
 			"total": money(total),
 		},
 	}
@@ -462,6 +463,15 @@ def submit_cart_order(address=None, shipping_method=None, payment_method=None):
 		frappe.throw(_("Your cart is empty."))
 	if order.customer != customer:
 		frappe.throw(_("This order does not belong to your account."), frappe.PermissionError)
+	if shipping_method and shipping_method != "standard":
+		frappe.throw(_("Please select the available shipping option."))
+	if payment_method and payment_method != "confirmation":
+		frappe.throw(_("Please select the available payment option."))
+
+	shipping_address = _save_shipping_address(customer, address)
+	if shipping_address:
+		order.shipping_address_name = shipping_address
+		order.customer_address = shipping_address
 
 	warehouse = _warehouse(order.company)
 	for row in order.items:
@@ -480,3 +490,38 @@ def submit_cart_order(address=None, shipping_method=None, payment_method=None):
 	order.submit()
 	frappe.db.commit()
 	return {"ok": True, "order": order.name}
+
+
+def _save_shipping_address(customer, address):
+	"""Validate and persist the checkout address linked to the current customer."""
+	if isinstance(address, str):
+		try:
+			address = json.loads(address)
+		except (TypeError, ValueError):
+			frappe.throw(_("Please enter a valid shipping address."))
+	address = address or {}
+	required = {
+		"full_name": _("recipient name"),
+		"street": _("street address"),
+		"city": _("city"),
+		"country": _("country"),
+	}
+	missing = [label for field, label in required.items() if not (address.get(field) or "").strip()]
+	if missing:
+		frappe.throw(_("Please enter the {0}.").format(", ".join(missing)))
+
+	title = (address.get("company") or address.get("full_name") or "Shipping").strip()
+	doc = frappe.get_doc({
+		"doctype": "Address",
+		"address_title": title,
+		"address_type": "Shipping",
+		"address_line1": address.get("street").strip(),
+		"city": address.get("city").strip(),
+		"state": (address.get("state") or "").strip(),
+		"pincode": (address.get("zip") or "").strip(),
+		"country": address.get("country").strip(),
+		"phone": (address.get("phone") or "").strip(),
+		"is_shipping_address": 1,
+		"links": [{"link_doctype": "Customer", "link_name": customer}],
+	}).insert(ignore_permissions=True)
+	return doc.name

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="DollarBasket">
+  <rect width="64" height="64" rx="14" fill="#0d1f3c"/>
+  <path d="M14 17h7l4 8h27l-7 19H27L19 24" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M29 31h16" stroke="#e7c25a" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="30" cy="51" r="4" fill="#fff"/>
+  <circle cx="44" cy="51" r="4" fill="#e7c25a"/>
+</svg>

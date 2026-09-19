@@ -7,27 +7,21 @@ import frappe
 from frappe import _
 
 from ecommerce.api.cart import _so_get, get_cart_data, submit_cart_order
-from ecommerce.api.common import money
-
-# Shipping options are app-defined (the site has no shipping-rule data).
-# `price_value` is formatted to the storefront currency in get_checkout_context().
+# The cart currently has one configured shipping charge. Do not advertise
+# delivery times or geographic coverage until real Shipping Rules are wired in.
 SHIPPING_METHODS = [
-	{"id": "standard", "title": "Standard Delivery (3-5 days)", "desc": "Nationwide courier delivery — Cash on Delivery available.", "price_value": 45.00, "checked": True},
-	{"id": "express", "title": "Express Delivery (1-2 days)", "desc": "Faster delivery for Karachi, Lahore & Islamabad.", "price_value": 120.00, "checked": False},
-	{"id": "freight", "title": "Same-Day Delivery", "desc": "Order before 2 PM for same-day delivery in Karachi, Lahore & Islamabad.", "price_value": 450.00, "checked": False},
+	{"id": "standard", "title": "Shipping arranged after order review", "desc": "Delivery timing and charges are not included in the online total.", "price_value": 0.00, "checked": True},
 ]
 
 PAYMENT_METHODS = [
-	{"id": "cod", "title": "Cash on Delivery", "icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>', "checked": True},
-	{"id": "card", "title": "Debit / Credit Card", "icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>', "checked": False},
-	{"id": "wire", "title": "Bank Transfer", "icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18M5 21V10m14 11V10M3 10l9-6 9 6M9 21v-6h6v6"/></svg>', "checked": False},
+	{"id": "confirmation", "title": "Payment details to be confirmed", "icon": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg>', "checked": True},
 ]
 
 
 def get_checkout_context():
 	cart = get_cart_data()
 	summary_items = [{"name": i["name"], "qty": i["qty"], "price": i["total"]} for i in cart["items"]]
-	shipping_methods = [dict(m, price=money(m["price_value"])) for m in SHIPPING_METHODS]
+	shipping_methods = [dict(m, price="To confirm") for m in SHIPPING_METHODS]
 	return {
 		"summary_items": summary_items,
 		"summary": cart["summary"],
