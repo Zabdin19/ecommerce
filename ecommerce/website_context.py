@@ -76,9 +76,10 @@ def get_chrome():
 	def hpval(fieldname, default=""):
 		return ((hp.get(fieldname) if hp else None) or "").strip() or default
 
-	# The application identity is authoritative when Website Settings has not
-	# been configured. A migration patch replaces known legacy brand values.
-	brand = val("brand") or val("app_name") or "DollarBasket"
+	# Website Settings.app_name is a Desk/login branding field (it defaults to
+	# "Frappe" out of the box) and must never leak into the storefront brand —
+	# only the storefront-facing "brand" field is honoured here.
+	brand = val("brand") or "DollarBasket"
 	uploaded_logo = (hp.get("header_logo") if hp else None) or settings.get("banner_image") or settings.get("app_logo")
 
 	# Storefront login state is intentionally separate from Frappe/Desk sid.

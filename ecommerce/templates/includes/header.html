@@ -2,6 +2,10 @@
 {% include "templates/includes/theme.html" %}
 <header class="fe-header">
 	<div class="fe-container fe-header__inner">
+		<button type="button" class="fe-menutoggle" data-nav-toggle aria-label="Open menu" aria-expanded="false" aria-controls="fe-nav">
+			<svg class="fe-menutoggle__open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+			<svg class="fe-menutoggle__close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
+		</button>
 		<a href="/" class="fe-brand" aria-label="{{ chrome.brand }} home">
 			{% if chrome.logo %}<img src="{{ chrome.logo }}" alt="{{ chrome.brand }}">{% else %}{{ chrome.brand }}{% endif %}
 		</a>
@@ -11,7 +15,7 @@
 				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
 			</button>
 		</form>
-		<nav class="fe-nav">
+		<nav class="fe-nav" id="fe-nav">
 			{% for item in chrome.nav_items %}
 			<a href="{{ item.url }}"{% if item.active %} class="is-active"{% endif %}>{{ item.label }}</a>
 			{% endfor %}
@@ -51,3 +55,33 @@
 		</div>
 	</div>
 </header>
+
+<script>
+// Mobile hamburger menu: toggles the nav panel and closes on link click / outside click.
+(function () {
+	var toggle = document.querySelector("[data-nav-toggle]");
+	var nav = document.getElementById("fe-nav");
+	if (!toggle || !nav) return;
+
+	function setOpen(open) {
+		nav.classList.toggle("is-open", open);
+		toggle.classList.toggle("is-open", open);
+		toggle.setAttribute("aria-expanded", open ? "true" : "false");
+	}
+
+	toggle.addEventListener("click", function () {
+		setOpen(!nav.classList.contains("is-open"));
+	});
+	nav.addEventListener("click", function (e) {
+		if (e.target.closest("a")) setOpen(false);
+	});
+	document.addEventListener("click", function (e) {
+		if (nav.classList.contains("is-open") && !nav.contains(e.target) && !toggle.contains(e.target)) {
+			setOpen(false);
+		}
+	});
+	window.addEventListener("resize", function () {
+		if (window.innerWidth > 820) setOpen(false);
+	});
+})();
+</script>

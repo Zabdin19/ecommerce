@@ -1,5 +1,5 @@
 {% extends "templates/base.html" %}
-{% block head_include %}{{ super() }}<link rel="stylesheet" href="/assets/ecommerce/css/landing.css">{% endblock %}
+{% block head_include %}{{ super() }}<link rel="stylesheet" href="/assets/ecommerce/css/landing.css"><link rel="canonical" href="{{ canonical }}">{% endblock %}
 {% block navbar %}{% endblock %}
 {% block footer %}{% endblock %}
 {% block content %}{% include "templates/includes/legal.html" %}{% endblock %}
