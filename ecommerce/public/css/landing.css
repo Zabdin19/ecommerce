@@ -25,7 +25,12 @@
 	width: 100%;
 	max-width: 1200px;
 	margin: 0 auto;
-	padding: 0 24px;
+	/* Gutters only. Several blocks (`.fe-hero__inner`, `.fe-footer__bottom`, …)
+	   are containers *and* set their own vertical padding, so a `padding`
+	   shorthand here would reset theirs to 0 wherever this rule happens to come
+	   later in the cascade. */
+	padding-left: 24px;
+	padding-right: 24px;
 }
 
 .fe-page a { text-decoration: none; color: inherit; }
@@ -55,10 +60,14 @@
 	gap: 18px;
 	min-height: 72px;
 	flex-wrap: wrap;
-	max-width: 100%;
+	/* No `max-width` override here: the header keeps `.fe-container`'s 1200px so
+	   the brand lines up with the hero and footer instead of running edge to
+	   edge on a wide screen (which also left the search absorbing the slack). */
 }
-.fe-brand { font-size: 22px; font-weight: 800; letter-spacing: .2px; color: #fff; flex: 0 0 auto; }
-.fe-brand img { max-height: 42px; width: auto; display: block; }
+.fe-brand { font-size: 22px; font-weight: 800; letter-spacing: .2px; color: #fff; flex: 0 1 auto; min-width: 0; }
+/* The mark is a wide 390x96 lockup, so it needs a width cap as well as a height
+   cap — otherwise it keeps its intrinsic width and crowds out the header. */
+.fe-brand img { max-height: 42px; max-width: 100%; width: auto; height: auto; display: block; }
 .fe-menutoggle {
 	display: none;
 	flex: 0 0 auto;
@@ -87,6 +96,9 @@
 	border-radius: 8px;
 	padding: 0 10px;
 	min-width: 160px;
+	/* It is the only item allowed to grow, so cap it or it swallows every pixel
+	   the brand, nav and actions leave behind. */
+	max-width: 460px;
 }
 .fe-search input {
 	flex: 1;
@@ -100,13 +112,19 @@
 }
 .fe-search input::placeholder { color: rgba(255,255,255,.6); }
 .fe-search button { background: transparent; border: 0; color: rgba(255,255,255,.85); cursor: pointer; padding: 4px; }
-.fe-nav { display: flex; gap: 18px; font-size: 14px; font-weight: 600; white-space: nowrap; }
+/* `margin-left: auto` keeps the nav and actions flush right once the search
+   stops growing. The mobile panel resets it with its `margin` shorthand. */
+.fe-nav { display: flex; gap: 18px; font-size: 14px; font-weight: 600; white-space: nowrap; margin-left: auto; }
+/* Shown only inside the mobile nav panel (see the 820px breakpoint). */
+.fe-nav__auth { display: none; }
 .fe-nav a { color: rgba(255,255,255,.85); padding: 6px 0; border-bottom: 2px solid transparent; }
 .fe-nav a:hover { color: #fff; }
 .fe-nav a.is-active { color: var(--gold-2); border-bottom-color: var(--gold-2); }
 .fe-header__actions { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; white-space: nowrap; }
-.fe-iconbtn { color: rgba(255,255,255,.9); display: inline-flex; }
+.fe-iconbtn { color: rgba(255,255,255,.9); display: inline-flex; flex: 0 0 auto; }
 .fe-iconbtn:hover { color: var(--gold-2); }
+/* Replaces the "Login / Register" text on narrow screens. */
+.fe-loginicon { display: none; }
 .fe-authlinks { color: #f1605c; font-weight: 600; font-size: 14px; white-space: nowrap; letter-spacing: .2px; }
 .fe-authlinks a { color: #f1605c; text-decoration: none; }
 .fe-authlinks a:hover, .fe-authlinks--logout:hover { color: #fff; }
@@ -128,6 +146,9 @@
 .fe-account__menu a#fe-logout:hover svg { color: #c0392b; }
 .fe-cartlink { position: relative; }
 .fe-cart-badge { position: absolute; top: -8px; right: -10px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 9px; background: var(--gold); color: var(--navy); font-size: 10px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; line-height: 1; }
+/* The class's `display` outranks the UA rule for [hidden], so an empty cart
+   would still show a "0" bubble without this. */
+.fe-cart-badge[hidden] { display: none; }
 .fe-cart__empty, .fe-empty { padding: 28px; text-align: center; color: var(--muted); font-size: 14px; }
 .fe-cart__empty a, .fe-empty a { color: var(--navy); font-weight: 700; }
 
@@ -314,15 +335,24 @@
 	.fe-footer__top { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 820px) {
-	.fe-header__inner { min-height: 64px; row-gap: 10px; }
+	/* The search drops to its own row here, so the header needs a bottom gutter
+	   to keep it off whatever section follows. */
+	.fe-header__inner { min-height: 64px; row-gap: 10px; gap: 12px; padding-bottom: 12px; }
 	.fe-menutoggle { display: inline-flex; order: 1; }
-	.fe-brand { order: 2; }
-	.fe-brand img { max-height: 32px; }
-	.fe-header__actions { order: 3; margin-left: auto; gap: 8px; }
+	.fe-brand { order: 2; max-width: 150px; }
+	.fe-brand img { max-height: 30px; }
+	.fe-header__actions { order: 3; margin-left: auto; gap: 14px; }
 	.fe-account__meta { display: none; }
 	.fe-account__btn { padding: 5px; border-radius: 50%; }
-	.fe-authlinks { font-size: 12.5px; }
-	.fe-search { order: 4; flex: 1 1 100%; min-width: 0; }
+	/* The text links no longer fit beside the mark; the icon and the nav panel
+	   below take over. */
+	.fe-authlinks { display: none; }
+	.fe-loginicon { display: inline-flex; }
+	/* Full-bleed on its own row here, so drop the desktop cap. */
+	.fe-search { order: 4; flex: 1 1 100%; min-width: 0; max-width: none; }
+	.fe-nav__auth { display: flex; flex-direction: column; }
+	.fe-nav__auth a { font-weight: 700; }
+	.fe-nav__auth a:last-child { color: var(--gold-2); border-bottom: 0; }
 	.fe-nav {
 		order: 5;
 		display: none;
@@ -347,11 +377,15 @@
 	.fe-hero__cta .fe-btn { justify-content: center; }
 }
 @media (max-width: 560px) {
-	.fe-container { padding: 0 16px; }
+	/* Horizontal only — see the base rule. */
+	.fe-container { padding-left: 16px; padding-right: 16px; }
 	.fe-products { grid-template-columns: 1fr; }
 	.fe-cats__grid { grid-template-columns: 1fr; }
 	.fe-footer__top { grid-template-columns: 1fr; }
-	.fe-announce__inner { gap: 8px; font-size: 10.5px; flex-wrap: wrap; height: auto; padding: 6px 0; text-align: center; }
+	.fe-announce__inner { gap: 4px 10px; font-size: 10.5px; flex-wrap: wrap; height: auto; padding: 6px 0; text-align: center; }
+	/* Once the items wrap onto separate lines the divider just dangles at the
+	   end of the first one. */
+	.fe-announce__sep { display: none; }
 	/* In column direction `flex-basis` applies to the HEIGHT, so the form's
 	   `flex: 1 1 360px` would stretch it (and its input) ~360px tall. */
 	.fe-newsletter { flex-direction: column; align-items: stretch; gap: 16px; }
@@ -368,8 +402,10 @@
 }
 @media (max-width: 380px) {
 	.fe-header__inner { gap: 10px; }
-	.fe-authlinks { font-size: 11.5px; }
-	.fe-brand img { max-height: 28px; }
+	.fe-brand { max-width: 118px; }
+	.fe-brand img { max-height: 26px; }
+	.fe-header__actions { gap: 12px; }
+	.fe-menutoggle { width: 36px; height: 36px; }
 }
 
 /* ===================================================================

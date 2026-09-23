@@ -19,6 +19,14 @@
 			{% for item in chrome.nav_items %}
 			<a href="{{ item.url }}"{% if item.active %} class="is-active"{% endif %}>{{ item.label }}</a>
 			{% endfor %}
+			{% if not chrome.logged_in %}
+			{# Mobile only: the header auth links are hidden on narrow screens, so
+			   the slide-down panel carries them instead. #}
+			<div class="fe-nav__auth">
+				<a href="/sign-in">Login</a>
+				<a href="/register">Register</a>
+			</div>
+			{% endif %}
 		</nav>
 		<div class="fe-header__actions">
 			<a href="/wishlist" aria-label="Wishlist" class="fe-iconbtn">
@@ -51,6 +59,10 @@
 			</div>
 			{% else %}
 			<span class="fe-authlinks"><a href="/sign-in">Login</a> / <a href="/register">Register</a></span>
+			{# Compact stand-in for the text links once the header runs out of room. #}
+			<a href="/sign-in" class="fe-iconbtn fe-loginicon" aria-label="Login or register">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>
+			</a>
 			{% endif %}
 		</div>
 	</div>

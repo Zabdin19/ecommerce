@@ -87,10 +87,13 @@ home_page = "storefront"
 # ----------
 
 # add methods and filters to jinja environment
-# jinja = {
-# 	"methods": "ecommerce.utils.jinja_methods",
-# 	"filters": "ecommerce.utils.jinja_filters"
-# }
+# `asset_url` stamps static asset URLs with the file mtime so a deploy is picked
+# up immediately instead of serving the browser's long-cached copy.
+jinja = {
+	"methods": [
+		"ecommerce.assets.asset_url",
+	],
+}
 
 # Installation
 # ------------

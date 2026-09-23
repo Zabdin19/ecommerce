@@ -12,6 +12,8 @@ default that matches the reference design.
 
 import frappe
 
+from ecommerce.assets import asset_url
+
 DEFAULT_NAV = [
 	{"label": "Products", "url": "/all-products"},
 	{"label": "Bulk Orders", "url": "/request-quote"},
@@ -45,6 +47,10 @@ DEFAULT_FOOTER_COLUMNS = [
 # (Banner Image / App Logo) overrides both.
 DEFAULT_LOGO_ON_DARK = "/assets/ecommerce/images/logo-light.svg"
 DEFAULT_LOGO_ON_LIGHT = "/assets/ecommerce/images/logo.svg"
+
+# Shown in the footer's "Contact Us" column and behind its email icon. Override
+# it per site from Website Settings → Footer Contact Email.
+DEFAULT_FOOTER_CONTACT_EMAIL = "info@dollarbasket.com"
 
 DEFAULT_FOOTER_DESCRIPTION = (
 	"DollarBasket is a B2B ecommerce platform for business customers, retailers, "
@@ -114,8 +120,10 @@ def get_chrome():
 		brand=brand,
 		brand_html=settings.get("brand_html"),
 		# `logo` is shown on the dark header/footer; `logo_on_light` on light pages.
-		logo=uploaded_logo or DEFAULT_LOGO_ON_DARK,
-		logo_on_light=uploaded_logo or DEFAULT_LOGO_ON_LIGHT,
+		# Stamped for the same reason the stylesheet is: a replaced bundled mark
+		# would otherwise stay cached in visitors' browsers after a deploy.
+		logo=asset_url(uploaded_logo or DEFAULT_LOGO_ON_DARK),
+		logo_on_light=asset_url(uploaded_logo or DEFAULT_LOGO_ON_LIGHT),
 		search_placeholder=hpval("search_placeholder", "Search by product name, SKU, or brand…"),
 		announcement_text_1=hpval("topbar_free_freight_text", val("custom_announcement_text_1", "Built for business purchasing")),
 		announcement_text_2=hpval("topbar_distributor_text", val("custom_announcement_text_2", "Bulk order quote requests available")),
@@ -123,7 +131,7 @@ def get_chrome():
 		footer_description=val("custom_footer_description", DEFAULT_FOOTER_DESCRIPTION),
 		footer_contact_address=val("custom_footer_contact_address"),
 		footer_contact_phone=val("custom_footer_contact_phone"),
-		footer_contact_email=val("custom_footer_contact_email"),
+		footer_contact_email=val("custom_footer_contact_email", DEFAULT_FOOTER_CONTACT_EMAIL),
 		footer_columns=footer_columns(settings.get("custom_footer_links")),
 		copyright=val("copyright", "DollarBasket. All Rights Reserved."),
 		cart_count=cart_qty,

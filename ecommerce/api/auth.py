@@ -201,11 +201,13 @@ def get_logged_in_customer():
 
 
 @frappe.whitelist(allow_guest=True)
-def register(first_name, last_name=None, email=None, phone=None, password=None, confirm_password=None):
+def register(first_name, last_name=None, email=None, phone=None, password=None,
+		confirm_password=None, company_name=None):
 	first_name = (first_name or "").strip()
 	last_name = (last_name or "").strip()
 	email = (email or "").strip().lower()
 	phone = (phone or "").strip()
+	company_name = (company_name or "").strip()
 
 	if not first_name:
 		return {"ok": False, "message": "Please enter your first name."}
@@ -229,12 +231,22 @@ def register(first_name, last_name=None, email=None, phone=None, password=None, 
 		# Customer record ONLY — no User, no Contact, no login provisioning.
 		# Insert without email_id/mobile_no first: the Customer controller would
 		# otherwise auto-spawn a primary Contact for them (create_primary_contact).
+		#
+		# `custom_email_address` and `custom_company_name` are mandatory custom
+		# fields on Customer, so they have to be part of the insert itself —
+		# leaving them out makes the insert fail and blocks registration (and
+		# therefore login) entirely. Sole traders may not give a company, so fall
+		# back to their own name rather than dead-ending the signup.
 		customer = frappe.get_doc({
 			"doctype": "Customer",
 			"customer_name": full_name or email,
 			"customer_type": "Individual",
 			"customer_group": default_customer_group(),
 			"territory": default_territory(),
+			"custom_company_name": company_name or full_name or email,
+			"custom_email_address": email,
+			"custom_last_name": last_name or None,
+			"custom_phone_number": phone or None,
 		}).insert(ignore_permissions=True)
 
 		# Write contact details straight to the DB so the controller's

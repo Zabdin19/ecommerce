@@ -21,11 +21,12 @@ from ecommerce.api import wishlist as _wishlist
 
 @frappe.whitelist(allow_guest=True)
 def register_customer(first_name=None, last_name=None, email=None, phone=None,
-		password=None, confirm_password=None):
+		password=None, confirm_password=None, company_name=None):
 	"""Register a storefront customer account. Does NOT create a Frappe User."""
 	return _auth.register(
 		first_name=first_name, last_name=last_name, email=email,
 		phone=phone, password=password, confirm_password=confirm_password,
+		company_name=company_name,
 	)
 
 
